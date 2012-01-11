@@ -1,4 +1,1 @@
-require 'sinatra'
-
-require 'models'
-require 'controllers'
+require 'environment'
