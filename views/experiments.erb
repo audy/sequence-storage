@@ -1,0 +1,8 @@
+
+<ul>
+<% @experiments.each do |experiment| %>
+
+    <li><%= experiment.id  %> - <%= experiment.name %> - <%= link_tag(:to => "/experiment/#{experiment.id}", :name => 'view') %>
+
+<% end %>
+</ul>

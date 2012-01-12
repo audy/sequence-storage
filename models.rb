@@ -5,10 +5,10 @@
 class Experiment
   include DataMapper::Resource
   
-  property :id, Serial
-  property :created_at, DateTime
+  property :id,          Serial
+  property :created_at,  DateTime
   
-  property :name, String
+  property :name,        String
   property :description, Text
   
   validates_presence_of :name
