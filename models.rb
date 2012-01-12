@@ -14,3 +14,8 @@ class Experiment
   validates_presence_of :name
   
 end
+
+# The User Model
+# 
+class User
+end
