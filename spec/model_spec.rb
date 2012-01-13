@@ -29,10 +29,18 @@ end
 
 describe 'User Model' do
   
-  let(:user) { User.new(:email => 'test@test.com') }
+  let(:user) { User.new(:email => 'test@test.com', :name => 'Testy McTesterson') }
   
   it 'can be created' do
     user.should_not be_nil
+  end
+  
+  it 'has a name' do
+    user.name.should_not be_nil
+  end
+  
+  it 'has an email' do
+    user.email.should_not be_nil
   end
   
   it 'encrypts password' do
