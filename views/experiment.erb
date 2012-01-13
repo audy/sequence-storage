@@ -2,6 +2,7 @@
 
 <% if !@experiment.nil? %>
   <h1><%= @experiment.name %></h1>
+  <p>Created: <%= @experiment.created_at %></p>
   <p><%= @experiment.description || 'no description' %></p>
 <% else %>
   <p>no such experiment <%= params[:id] %></p>
