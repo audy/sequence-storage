@@ -2,7 +2,8 @@ require './environment.rb'
 
 helpers do
   def link_tag(args={})
-    "<a href=\"#{args[:to]}\">#{args[:name]}</a>"
+    $stderr.puts
+    "<a href=\"#{args[:to]}\"" + " class=\"#{args[:class]}\" " + ">#{args[:name]}</a>"
   end
 end
 
@@ -14,19 +15,30 @@ get '/' do
 end
 
 ##
-# List all experiments
+# Experiments
 #
 get '/experiments?/?' do
   @experiments = Experiment.all
   erb :experiments
 end
 
-# Get a specific experiment
-#
+get '/experiment/new' do
+  erb :experiment_new
+end
+
+post '/experiment/new' do
+  erb :experiment
+end
+
 get '/experiment/:id' do
   id = params[:id]
   @experiment = Experiment.get(id)
-  erb :experiment
+  if !@experiment.nil?
+    erb :experiment
+  else
+    session[:error] = "no such experiment \'#{params[:id]}\'"
+    redirect '/experiments'
+  end
 end
 
 ##

@@ -1,4 +1,8 @@
 <%= link_tag :to => '/experiments', :name => 'back' %>
 
-<h1><%= @experiment.name %></h1>
-<p><%= @experiment.description || 'no description' %></p>
+<% if !@experiment.nil? %>
+  <h1><%= @experiment.name %></h1>
+  <p><%= @experiment.description || 'no description' %></p>
+<% else %>
+  <p>no such experiment <%= params[:id] %></p>
+<% end %>
