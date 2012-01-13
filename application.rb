@@ -13,7 +13,7 @@ end
 
 # List all experiments
 #
-get '/experiment/?' do
+get '/experiments?/?' do
   @experiments = Experiment.all
   erb :experiments
 end

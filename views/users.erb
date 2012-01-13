@@ -1,0 +1,7 @@
+<ul>
+  <% @users.each do |user| %>
+  
+    <li><%= user.id %> - <%= link_tag(:to=>"/user/#{user.id}", :name =>'view') %>
+
+  <% end %>
+</ul>
