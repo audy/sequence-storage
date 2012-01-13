@@ -15,9 +15,21 @@
           <ul class="nave">
             <li><a href="/">Home</a></li>
             <li><a href="/experiments">Experiments</a></li>
+            <li><a href="/users">Users</a></li>
           <ul>
         </div>
       </div>
+    </div>
+    
+    <div class="span10 offset6">
+      <% if session[:flash] %>
+        <div class="alert-message success"><%= session[:flash] %></div>
+      <% end %>
+    
+      <% if session[:error] %>
+        <div class="alert-message error"><%= session[:error] %></div>
+      <% end %>    
+      <% session[:flash], session[:error] = nil, nil %>
     </div>
     
     <div class="container">
@@ -29,7 +41,7 @@
     </div>
 
     <footer>
-      blah
+      <%= session.inspect %>
     </footer>
     
   </body>

@@ -9,3 +9,4 @@ ENVIRONMENT = :deveopment
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite3://' + File.expand_path(File.dirname(__FILE__)) + '/db/development.db')
 
+enable :sessions

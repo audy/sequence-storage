@@ -1,12 +1,12 @@
 <% if @user %>
 	<h2><%= @user.name %></h2>
-	<p><%= @user.password %></p>
+	<%= link_tag to: "mailto:" + @user.email, name: @user.email %>
 	
-	<form action= "/user" method="post">
-	  <p>Please enter the experiment name</p>
-	  <input type="text" name="experiment">
-	  <input type="submit">
-	</form>
+  <!-- <form action="/experiment/new" method="post">
+    <p>Please enter the experiment name</p>
+    <input type="text" name="experiment">
+    <input type="submit">
+  </form> -->
 <% else %>
 	<p>That user doesn't exist!</p>
 <% end %>
