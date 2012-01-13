@@ -7,6 +7,11 @@ task :console do
   IRB.start
 end
 
+desc "run rspec"
+task :spec do
+  sh "rspec -c"
+end
+
 namespace :db do
   
   desc "seed the database with informatione"
