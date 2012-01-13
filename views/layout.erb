@@ -6,58 +6,20 @@
   </head>
   <body>
     
-    <div class="topbar">
-      <div class="fill">
-        <div class="container">
-          
-          <div class="brand">
-            Experiments
-          </div>
-          
-          <ul class="nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/experiments">Experiments</a></li>
-            <li><a href="/users">Users</a></li>
-          </ul>
-          
-          <ul class="nav secondary-nav">
-            <% if !session[:user_id] %>
-              <li><a href="/session/new">Login</a></li>
-            <% else %>
-              <li><a href="/session"><%= session[:user_id] %></a></li>
-            <% end %>
-          </ul>
-            
-        </div>
-      </div>
-    </div>
+    <%= erb :top_bar %>
     
     <div class="container">
       
-      <% if session[:flash] || session[:error] %>
-        <div class="row">
-          <div class="span10 offset3">
-            <% if session[:flash] %>
-              <div class="alert-message success"><%= session[:flash] %></div>
-            <% end %>
-            
-             <% if session[:error] %>
-                <div class="alert-message error"><%= session[:error] %></div>
-             <% end %>    
-            </div>
-          </div>
-          
-        <% session[:flash], session[:error] = nil, nil %>
-        <% end %>
-      </div>
+      <%= erb :flash_bar %>
       
       <div class="row">
         <div class="span16">
           <%= yield %>
         </div>
       </div>
-    </div>
-
+      
+    </div><!-- container -->
+    
     <footer>
       <%= session.inspect %>
     </footer>

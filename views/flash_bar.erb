@@ -1,0 +1,23 @@
+<% if session[:flash] || session[:error] %>
+
+  <div class="row">
+    <div class="span10 offset3">
+
+      <% if session[:flash] %>
+        <div class="alert-message success">
+          <%= session[:flash] %>
+        </div>
+      <% end %>
+    
+      <% if session[:error] %>
+        <div class="alert-message error">
+          <%= session[:error] %>
+        </div>
+      <% end %>
+  
+    </div>
+  </div>
+
+  <% session[:flash], session[:error] = nil, nil %>
+
+<% end %>

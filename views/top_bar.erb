@@ -1,0 +1,25 @@
+<div class="topbar">
+  <div class="fill">
+    <div class="container">
+      
+      <div class="brand">
+        Experiments
+      </div>
+      
+      <ul class="nav">            
+        <li><a href="/">Home</a></li>
+        <li><a href="/experiments">Experiments</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+      
+      <ul class="nav secondary-nav">
+        <% if !session[:user_id] %>
+          <li><a href="/session/new">Login</a></li>
+        <% else %>
+          <li><a href="/session"><%= session[:user_id] %></a></li>
+        <% end %>
+      </ul>
+        
+    </div>
+  </div>
+</div>
