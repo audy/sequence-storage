@@ -9,10 +9,12 @@
     <div class="topbar">
       <div class="fill">
         <div class="container">
+          
           <div class="brand">
             Experiments
           </div>
-          <ul class="nave">
+          
+          <ul class="nav">
             <li><a href="/">Home</a></li>
             <li><a href="/experiments">Experiments</a></li>
             <li><a href="/users">Users</a></li>
@@ -21,18 +23,24 @@
       </div>
     </div>
     
-    <div class="span10 offset6">
-      <% if session[:flash] %>
-        <div class="alert-message success"><%= session[:flash] %></div>
-      <% end %>
-    
-      <% if session[:error] %>
-        <div class="alert-message error"><%= session[:error] %></div>
-      <% end %>    
-      <% session[:flash], session[:error] = nil, nil %>
-    </div>
-    
     <div class="container">
+      
+      <% if session[:flash] || session[:error] %>
+        <div class="row">
+          <div class="span10 offset3">
+            <% if session[:flash] %>
+              <div class="alert-message success"><%= session[:flash] %></div>
+            <% end %>
+            
+             <% if session[:error] %>
+                <div class="alert-message error"><%= session[:error] %></div>
+             <% end %>    
+            </div>
+          </div>
+          
+        <% session[:flash], session[:error] = nil, nil %>
+        <% end %>
+      </div>
       <div class="row">
         <div class="span16">
           <%= yield %>
