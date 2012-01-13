@@ -5,6 +5,10 @@ helpers do
     $stderr.puts
     "<a href=\"#{args[:to]}\"" + " class=\"#{args[:class]}\" " + ">#{args[:name]}</a>"
   end
+  
+  def pretty_time(t)
+    t.strftime("%m/%d/%y")
+  end
 end
 
 ##
