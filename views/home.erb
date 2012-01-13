@@ -1,1 +1,9 @@
-<h1>Recent Updates</h1>
+<div class="page-header">
+  <h1>Recent Updates</h1>
+</div>
+
+<ul>
+  <% Experiment.all.first(5).each do |e| %>
+    <li><%= pretty_time(e.created_at) %> - <%= link_tag to: "/experiment/#{e.id}", name: e.name %> - <%= e.description %></li>
+  <% end %>
+</ul>
