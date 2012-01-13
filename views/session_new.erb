@@ -1,7 +1,27 @@
-<form action="/session/new" method="post">
-  E-mail: <input type="text" name="email"> <br />
-  <br />
-  Password: <input type="password" name="password"> <br />
-  <br />
-  <input type="submit" value=" login ">
-</form>
+<div class="row">
+  <div class="span8 offset4">
+    <fieldset>
+      <legend>Login</legend>
+      <form action="/session/new" method="post">
+        
+        <div class="clearfix">
+          <label for="email">E-Mail:</label>
+          <div class="input">
+            <input type="text" name="username"/>
+          </div>
+        </div>
+        
+        <div class="clearfix">
+          <label for="password">Password
+          <div class="input">
+            <input type="password" name="password"/>
+          </div>
+        </div>
+        
+        <div class="actions">
+          <input type="submit" value="Login" class="btn primary"/>
+        </div>
+      </form>
+    <fieldset>
+  </div>
+</div>
