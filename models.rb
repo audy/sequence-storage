@@ -5,6 +5,7 @@ class Experiment
   
   property :id,          Serial
   property :created_at,  DateTime
+  property :update_at,   DateTime
   
   property :name,        String
   property :description, Text
@@ -20,6 +21,8 @@ class User
   include BCrypt
   
   attr_accessor :password
+  
+  property :created_at, DateTime
   
   property :id,    Serial
   property :email, String
