@@ -30,6 +30,12 @@ post '/experiment/new' do
   erb :experiment
 end
 
+get '/session/destroy' do
+  session[:user_id] = nil
+  session[:flash] = 'logged out'
+  redirect '/'
+end
+
 get '/experiment/:id' do
   id = params[:id]
   @experiment = Experiment.get(id)
