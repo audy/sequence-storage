@@ -54,14 +54,30 @@ end
 ##
 # Users
 #
+
 get '/users?/?' do
   @users = User.all
   erb :users
 end
 
+get '/user/new' do
+  erb :user_new
+end
+
 get '/user/:id' do
   @user = User.get(params[:id])
   erb :user
+end
+
+post '/user/new' do
+  user = User.new
+  user.name = params[:name]
+  user.password = params[:password]
+  user.email = params[:email]
+  
+  # need validation here
+  user.save
+  redirect '/'
 end
 
 ##
@@ -85,4 +101,11 @@ post '/session/new' do
     redirect '/session/new'
   end
   
+end
+
+# log gout
+
+get '/logout' do
+  session.clear
+  redirect '/'
 end
