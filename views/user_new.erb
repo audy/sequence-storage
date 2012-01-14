@@ -1,7 +1,22 @@
-<form action="/user/new" method ="post">
-  
-  name     <input type="text" name="name">		<br />
-  password <input type="text" name="password">	<br />
-  email    <input type="text" name="email">			<br />
-  <input type="submit" value="register">
+<form action="/user/new" method ="post" class="formbox">
+  <fieldset>
+    <legend>New User</legend>
+    <div class="clearfix">
+      <label for="name">Name:</label>
+      <div class="input">
+        <input type="text" name="name">		
+      </div><br />
+      <label for="password">Password:</label>
+      <div class="input">
+        <input type="text" name="password">	
+      </div><br />
+      <label for="email">Email:</label>
+      <div class="input">
+        <input type="text" name="email">			
+      </div><br />
+      <div class="input">
+        <input type="submit" value="register">
+      </div>
+    </div>
+  </fieldset>
 </form>
