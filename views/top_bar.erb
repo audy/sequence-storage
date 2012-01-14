@@ -19,6 +19,7 @@
           <li class="<%= 'active' if path =~ /^session/%>"><a href="/session/new">Login</a></li>
         <% else %>
           <li><a href="/session"><%= session[:user_id] %></a></li>
+          <li><a href="/logout">logout</a></li>
         <% end %>
       </ul>
         

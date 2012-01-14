@@ -102,3 +102,10 @@ post '/session/new' do
   end
   
 end
+
+# log gout
+
+get '/logout' do
+  session.clear
+  redirect '/'
+end
