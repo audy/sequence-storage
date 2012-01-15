@@ -135,12 +135,20 @@ get '/download' do
   if session[:user_id]
     erb :download
   else
-    'Please log in first'
+    session[:error] = "Please log in"
+    redirect '/'
   end
 end
 
-# 'currently you can only download from files folder but need an error handler'
+# 'currently you can only download from files folder'
+# 'But does not restrict browsing files for download'
 post '/download' do
   filename=params[:filename]
-  send_file "./files/#{filename}", :filename => filename, :type => 'Application/octet-stream'
+  if File.exists?("./files/"+filename)
+    send_file "./files/#{filename}", :filename => filename, :type => 'Application/octet-stream'
+  else
+    session[:error] = "File does not exist in files folder"
+    redirect '/'
+  end
 end
+
