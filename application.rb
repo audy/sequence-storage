@@ -129,4 +129,18 @@ post '/upload' do
   "Upload complete"
 end
 
+# download
 
+get '/download' do
+  if session[:user_id]
+    erb :download
+  else
+    'Please log in first'
+  end
+end
+
+# 'currently you can only download from files folder but need an error handler'
+post '/download' do
+  filename=params[:filename]
+  send_file "./files/#{filename}", :filename => filename, :type => 'Application/octet-stream'
+end
