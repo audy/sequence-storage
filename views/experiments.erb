@@ -2,7 +2,6 @@
   <h1>Experiments</h1>
 </div>
 
-
 <div class="row">
   <div class="span16">
     <table class="bordered-table zebra-striped">
@@ -14,6 +13,9 @@
           <th>
             Name
           </th>
+          <th>
+            Description
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +26,9 @@
             </td>
             <td>
               <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
+            </td>
+            <td>
+              <%= experiment.description.first 300 rescue 'n/a' %>
             </td>
           </tr>
         <% end %>
