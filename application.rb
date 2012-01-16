@@ -17,7 +17,7 @@ helpers do
   def gravatar(args={})
     email = args[:email]
     size = args[:size] || 100
-    "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}"
+    "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}&d=monsterid"
   end
 end
 
