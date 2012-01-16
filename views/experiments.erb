@@ -1,34 +1,42 @@
 <div class="page-header">
   <h1>Experiments</h1>
 </div>
+
+
 <div class="row">
   <div class="span16">
-  <%= link_tag to: '/experiment/new', name: 'Create Experiment', class: 'btn' %>
+    <table class="bordered-table zebra-striped">
+      <thead>
+        <tr>
+          <th>
+            ID
+          </td>
+          <th>
+            Name
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @experiments.each do |experiment| %>
+          <tr>
+            <td>
+              <%= experiment.id  %>
+            </td>
+            <td>
+              <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
   </div>
-  <hr>
 </div>
 
-<table class="bordered-table zebra-striped">
-  <thead>
-    <tr>
-      <th>
-        ID
-      </td>
-      <th>
-        Name
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @experiments.each do |experiment| %>
-      <tr>
-        <td>
-          <%= experiment.id  %>
-        </td>
-        <td>
-          <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="span16">
+    <div class="actions">
+      <%= link_tag to: '/experiment/new', name: 'Create Experiment', class: 'btn' %>
+    </div>
+  </div>
+</div>
