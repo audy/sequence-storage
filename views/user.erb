@@ -2,12 +2,6 @@
   <a href="http://gravatar.com/emails"><img src="<%= gravatar(:email => @user[:email], :size => 100) %>"></a>
 	<h2><%= @user.name %></h2>
 	<%= link_tag to: "mailto:" + @user.email, name: @user.email %>
-	
-  <!-- <form action="/experiment/new" method="post">
-    <p>Please enter the experiment name</p>
-    <input type="text" name="experiment">
-    <input type="submit">
-  </form> -->
 <% else %>
 	<p>That user doesn't exist!</p>
 <% end %>
