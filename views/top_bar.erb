@@ -1,17 +1,17 @@
 <% user = User.get(session[:user_id]) rescue nil %>
+<% path = request.path_info.split('/')[1] %>
 
 <div class="topbar">
   <div class="fill">
     <div class="container">
       
-      <div class="brand">
+      <a href="/" class="brand">
         Sequences
-      </div>
+      </a>
       
-      <% path = request.path_info.split('/')[1] %>
+      
 
       <ul class="nav">
-        <li class="<%= 'active ' if path.nil? %>"><a href="/">Home</a></li>
         <li class="<%= 'active' if path =~ /^experiment/ %>"><a href="/experiments">Experiments</a></li>
         <li class="<%= 'active' if path =~ /^user/ %>"><a href="/users">Users</a></li>
       </ul>
