@@ -34,6 +34,19 @@ post '/experiment/new' do
   erb :experiment
 end
 
+get '/experiment/:id/delete' do
+  @experiment = Experiment.get params[:id]
+  if @experiment.destroy
+    session[:flash] = 'deleted!'
+    redirect '/experiments'
+  else
+    session[:error] = 'something went wrong?!'
+  end
+end
+
+##
+# Sessions
+#
 get '/session/destroy' do
   session[:user_id] = nil
   session[:flash] = 'logged out'
@@ -83,7 +96,6 @@ end
 ##
 # Sessions
 #
-
 get '/session/new' do
   erb :session_new
 end
@@ -103,15 +115,14 @@ post '/session/new' do
   
 end
 
-# log out
-
-get '/logout' do
+get '/session.destroy' do
   session.clear
+  session[:flash] = "Succesfully logged-out"
   redirect '/'
 end
 
-# upload 
-
+##
+# Uploading/Downloading
 get '/upload' do
   erb :upload
 end
@@ -128,8 +139,6 @@ post '/upload' do
   end
   "Upload complete"
 end
-
-# download
 
 get '/download' do
   if session[:user_id]

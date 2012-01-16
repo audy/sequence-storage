@@ -4,6 +4,9 @@
   <h1><%= @experiment.name %></h1>
   <p>Created: <%= @experiment.created_at %></p>
   <p><%= @experiment.description || 'no description' %></p>
+  <% if session[:user_id] %>
+  <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'delete' %>
+  <% end %>
 <% else %>
   <p>no such experiment <%= params[:id] %></p>
 <% end %>
