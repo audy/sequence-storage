@@ -1,5 +1,5 @@
 <% if @user %>
-  <a href="http://www.gravatar.com/emails"><img class="thumbnail" src="http://www.gravatar.com/avatar/<%= Digest::MD5.hexdigest(@user.email) %>"></a>
+  <a href="http://gravatar.com/emails"><img src="<%= gravatar(:email => @user[:email], :size => 100) %>"></a>
 	<h2><%= @user.name %></h2>
 	<%= link_tag to: "mailto:" + @user.email, name: @user.email %>
 	

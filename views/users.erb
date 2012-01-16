@@ -2,14 +2,40 @@
   <h1>Users</h1>
 </div>
 
-<ul>
   <% if @users.length == 0 %>
     <p>There are no users! <%= link_tag(:to => '/user/new', :name => 'create one!')%></p>
   <% end %>
   
-  <% @users.each do |user| %>
-  
-    <li><%= user.id %> - <%= link_tag(:to=>"/user/#{user.id}", :name =>'view') %>
-
-  <% end %>
-</ul>
+  <table class="bordered-table zebra-striped">
+    <thead>
+      <tr>
+        <th><!-- icon--></th>
+        <th>
+          ID
+        </td>
+        <th>
+          Name
+        </th>
+        <th>
+          E-Mail
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td>
+            <img src="<%= gravatar(:email => user[:email], :size => 20) %>">
+          </td>
+          <td>
+            <%= user.id %>
+          </td>
+          <td>
+            <%= link_tag(:to=>"/user/#{user.id}", :name => user.name) %>
+          </td>
+          <td>
+            <%= link_tag(:to=>"mailto:#{user.email}", :name => user.email) %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
