@@ -1,22 +1,39 @@
-<form action="/user/new" method ="post" class="formbox">
-  <fieldset>
-    <legend>New User</legend>
-    <div class="clearfix">
-      <label for="name">Name:</label>
-      <div class="input">
-        <input type="text" name="name">		
-      </div><br />
-      <label for="password">Password:</label>
-      <div class="input">
-        <input type="text" name="password">	
-      </div><br />
-      <label for="email">Email:</label>
-      <div class="input">
-        <input type="text" name="email">			
-      </div><br />
-      <div class="input">
-        <input type="submit" value="register">
-      </div>
-    </div>
-  </fieldset>
-</form>
+<div class="row">
+  <div class="span8 offset4">
+
+    <form action="/user/new" method ="post" class="formbox">
+      <fieldset>
+        <legend>New User</legend>
+    
+        <div class="clearfix">
+          <label for="name">Name:</label>
+          <div class="input">
+            <input type="text" name="name">		
+          </div>
+        </div>
+    
+        <div class="clearfix">
+          <label for="email">Email:</label>
+          <div class="input">
+            <input type="text" name="email">			
+          </div>
+        </div>
+    
+        <div class="clearfix">
+          <label for="password">Password:</label>
+          <div class="input">
+            <input type="password" name="password">	
+          </div>
+        </div>
+    
+        <div class="actions">
+          <div class="input">
+            <input type="submit" class="btn primary" value="Register">
+          </div>
+        </div>
+    
+      </fieldset>
+    </form>
+    
+  </div>
+</div>
