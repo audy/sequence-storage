@@ -41,7 +41,28 @@ get '/experiment/new' do
 end
 
 post '/experiment/new' do
-  erb :experiment
+  experiment = Experiment.new
+  experiment.name = params[:name]
+  experiment.description = params[:description]
+  if experiment.valid?
+    experiment.save
+    session[:flash] = "Created a new experiment!"
+    redirect "/experiment/#{experiment.id}"
+  else
+    session[:error] = "Something went wrong"
+    redirect '/experiment/new'
+  end
+end
+
+get '/experiment/:id' do
+  id = params[:id]
+  @experiment = Experiment.get(id)
+  if !@experiment.nil?
+    erb :experiment
+  else
+    session[:error] = "no such experiment \'#{params[:id]}\'"
+    redirect '/experiments'
+  end
 end
 
 get '/experiment/:id/delete' do
@@ -61,17 +82,6 @@ get '/session/destroy' do
   session[:user_id] = nil
   session[:flash] = 'logged out'
   redirect '/'
-end
-
-get '/experiment/:id' do
-  id = params[:id]
-  @experiment = Experiment.get(id)
-  if !@experiment.nil?
-    erb :experiment
-  else
-    session[:error] = "no such experiment \'#{params[:id]}\'"
-    redirect '/experiments'
-  end
 end
 
 ##
