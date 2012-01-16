@@ -8,10 +8,27 @@
   <hr>
 </div>
 
-<ul>
-<% @experiments.each do |experiment| %>
-
-    <li><%= experiment.id  %> - <%= experiment.name %> - <%= link_tag(:to => "/experiment/#{experiment.id}", :name => 'view') %>
-
-<% end %>
-</ul>
+<table class="bordered-table zebra-striped">
+  <thead>
+    <tr>
+      <th>
+        ID
+      </td>
+      <th>
+        Name
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @experiments.each do |experiment| %>
+      <tr>
+        <td>
+          <%= experiment.id  %>
+        </td>
+        <td>
+          <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
