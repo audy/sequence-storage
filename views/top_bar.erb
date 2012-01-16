@@ -1,3 +1,5 @@
+<% user = User.get(session[:user_id]) rescue nil %>
+
 <div class="topbar">
   <div class="fill">
     <div class="container">
@@ -15,11 +17,11 @@
       </ul>
       
       <ul class="nav secondary-nav">
-        <% if !session[:user_id] %>
+        <% if !user %>
           <li class="<%= 'active' if path =~ /^session/%>"><a href="/session/new">Login</a></li>
         <% else %>
-          <li><a href="/session"><%= session[:user_id] %></a></li>
-          <li><a href="/logout">logout</a></li>
+          <li><a href="/user/<%= user.id %>"><%= user.name %></a></li>
+          <li><a href="/session/destroy">logout</a></li>
         <% end %>
       </ul>
         
