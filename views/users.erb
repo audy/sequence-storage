@@ -27,7 +27,7 @@
         <% @users.each do |user| %>
           <tr>
             <td>
-              <img src="<%= gravatar(:email => user[:email], :size => 20) %>">
+              <img src="<%= gravatar(:email => user[:email], :size => 16) %>">
             </td>
             <td>
               <%= link_tag(:to=>"/user/#{user.id}", :name => user.name) %>
