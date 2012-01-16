@@ -99,8 +99,14 @@ post '/user/new' do
   user.email = params[:email]
   
   # need validation here
-  user.save
-  redirect '/'
+  if user.valid?
+    user.save
+    session[:flash] = "Welcome, #{user.name}!"
+    redirect '/'
+  else
+    session[:error] = "Something went wrong :("
+    redirect '/user/new'
+  end
 end
 
 ##
