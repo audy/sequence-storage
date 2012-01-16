@@ -1,3 +1,13 @@
 body {
   padding-top: 60px;
 }
+
+img.thumbnail {
+  background: #aaa;
+  border-radius: 6px;
+  box-shadow: 0 0 3px #333;
+}
+
+img.thumbnail:hover {
+  box-shadow: 0 0 5px #33f;
+}
