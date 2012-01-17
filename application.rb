@@ -25,7 +25,7 @@ helpers do
 end
 
 before do
-  @user = User.get(session[:user_id])
+  @user = User.get(session[:user_id]) if session[:user_id]
 end
 
 ##
