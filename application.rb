@@ -43,7 +43,8 @@ end
 post '/experiment/new' do
   
   # first verify that user is logged in
-  if !session[:user_id]
+  user = User.get(session[:user_id])
+  unless user
     session[:error] = "You must be logged-in to do that!"
     redirect '/'
   end
@@ -51,6 +52,9 @@ post '/experiment/new' do
   experiment = Experiment.new
   experiment.name = params[:name]
   experiment.description = params[:description]
+  
+  experiment.users << user
+  
   if experiment.valid?
     experiment.save
     session[:flash] = "Created a new experiment!"
