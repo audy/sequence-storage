@@ -56,7 +56,8 @@ post '/experiment/new' do
   # assign user to experiment
   experiment.users << user
   
-  if experiment.save
+  if experiment.valid?
+    experiment.save
     session[:flash] = "Created a new experiment!"
     redirect "/experiment/#{experiment.id}"
   else
@@ -139,6 +140,7 @@ post '/user/new' do
   # need validation here
   if user.valid?
     user.save
+    session[:user_id] = user.id
     session[:flash] = "Welcome, #{user.name}!"
     redirect '/'
   else
