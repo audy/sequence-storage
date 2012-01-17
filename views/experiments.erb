@@ -2,41 +2,44 @@
   <h1>Experiments</h1>
 </div>
 
-<div class="row">
-  <div class="span16">
-    <table class="bordered-table zebra-striped">
-      <thead>
-        <tr>
-          <th>
-            ID
-          </td>
-          <th>
-            Name
-          </th>
-          <th>
-            Description
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @experiments.each do |experiment| %>
+<% unless @experiments.length == 0  %>
+  <div class="row">
+    <div class="span16">
+      <table class="bordered-table zebra-striped">
+        <thead>
           <tr>
-            <td>
-              <%= experiment.id  %>
+            <th>
+              ID
             </td>
-            <td>
-              <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
-            </td>
-            <td>
-              <%= experiment.description.first 300 rescue 'n/a' %>
-            </td>
+            <th>
+              Name
+            </th>
+            <th>
+              Description
+            </th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-    
+        </thead>
+        <tbody>
+          <% @experiments.each do |experiment| %>
+            <tr>
+              <td>
+                <%= experiment.id  %>
+              </td>
+              <td>
+                <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
+              </td>
+              <td>
+                <%= experiment.description.first 300 rescue 'n/a' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+<% else %>
+  <p>There are no experiments :(</p>
+<% end %>
 
 <div class="row">
   <div class="span16">
