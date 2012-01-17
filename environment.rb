@@ -6,7 +6,7 @@ require 'dm-timestamps'
 require 'bcrypt'
 require './models.rb'
 
-ENVIRONMENT = :deveopment
+ENVIRONMENT = :development
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite3://' + File.expand_path(File.dirname(__FILE__)) + '/db/development.db')
 
