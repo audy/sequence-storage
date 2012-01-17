@@ -41,6 +41,13 @@ get '/experiment/new' do
 end
 
 post '/experiment/new' do
+  
+  # first verify that user is logged in
+  if !session[:user_id]
+    session[:error] = "You must be logged-in to do that!"
+    redirect '/'
+  end
+  
   experiment = Experiment.new
   experiment.name = params[:name]
   experiment.description = params[:description]
