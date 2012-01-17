@@ -73,7 +73,7 @@ describe 'User Model' do
   it 'can be given experiments' do
     user.experiments << Experiment.new(:name => 'test')
     user.save
-    user.experimenets.should_not be_nil
+    user.experiments.should_not be_nil
   end
   
 end
