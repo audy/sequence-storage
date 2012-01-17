@@ -12,22 +12,27 @@ describe 'The homepage' do
   end
   
   it 'should have a link to list experiments' do
-    visit '/'
+    get '/'
     response_body.should contain 'Experiments'
   end
   
   it 'should have a link to list users' do
-    visit '/'
+    get '/'
     response_body.should contain 'Users'
   end
 end
 
 describe '/users' do
   let (:user) { User.create :name => "test_user", :email => "test@test.com", :password => 'test' }
+
+  def app
+    Sinatra::Application
+  end
+
   
   it 'should list users' do
     user
-    visit '/users'
+    get '/users'
     response_body.should contain user.name
   end
 end
