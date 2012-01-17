@@ -10,6 +10,8 @@ class Experiment
   property :name,        String
   property :description, Text
   
+  has n, :users, :through => Resource
+  
   validates_presence_of :name
   
 end
@@ -28,6 +30,8 @@ class User
   property :email, String
   property :name,  String
   property :crypted_password, String, :length => 70
+  
+  has n, :experiments, :through => Resource
   
   validates_uniqueness_of    :email,    :case_sensitive => false
   validates_format_of        :email,    :with => :email_address
