@@ -2,7 +2,19 @@
 
 <% if !@experiment.nil? %>
   <h1><%= @experiment.name %></h1>
-  <p>Created: <%= @experiment.created_at %></p>
+  <p>Created: <%= pretty_time @experiment.created_at %></p>
+  
+  <% if @experiment.users.length == 0 %>
+    <p>This experiment is an orphan!</p>
+  <% else %>  
+    <ul>Owner(s)</ul>
+      <% @experiment.users.each do |user| %>
+        <li><%= user %></li>
+        <% user.inspect %>
+      <% end %>
+    </ul>
+  <% end %>
+  
   <p><%= @experiment.description || 'no description' %></p>
   <% if session[:user_id] %>
   <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'delete' %>
