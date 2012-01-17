@@ -25,6 +25,13 @@ describe 'Experiment Model' do
     experiment.valid?.should be_false
   end
   
+  it 'can be given owners' do
+    user = User.new(:email => 'test@test.com', :name => 'Testy McTesterson')
+    experiment.users << user
+    experiment.save
+    experiment.users.should_not be_nil
+  end
+  
 end
 
 describe 'User Model' do
@@ -61,6 +68,12 @@ describe 'User Model' do
     user.save
     user = User.authenticate('test@user.com', 'this is not the password')
     user.should be_nil
+  end
+  
+  it 'can be given experiments' do
+    user.experiments << Experiment.new(:name => 'test')
+    user.save
+    user.experimenets.should_not be_nil
   end
   
 end
