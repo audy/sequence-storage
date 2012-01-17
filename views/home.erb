@@ -1,17 +1,28 @@
-
-<div class="row">
-  <div class="hero-unit">
-    <h1>Sequences</h1>
-    <p>This site is meant to hold our high-throughput sequence data in a manner that is easy to use and secure</p>
+<% if @user %>
+  <div class="page-header">
+    <h1>Recent Updates</h1>
   </div>
-</div>
 
-<div class="page-header">
-  <h1>Recent Updates</h1>
-</div>
-
-<ul>
-  <% Experiment.all.first(5).each do |e| %>
-    <li><%= pretty_time(e.created_at) %> - <%= link_tag to: "/experiment/#{e.id}", name: e.name %> - <%= e.description %></li>
-  <% end %>
-</ul>
+  <div class="row">
+    <div class="span16">
+      <ul>
+        <% Experiment.all.first(5).each do |e| %>
+          <li><%= pretty_time(e.created_at) %> - <%= link_tag to: "/experiment/#{e.id}", name: e.name %> - <%= e.description %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% else %>
+  <div class="row">
+    <div class="hero-unit">
+      <h1>Sequences</h1>
+      <p>This site is meant to hold our high-throughput sequence data in a manner that is easy to use and secure</p>
+      <hr/>
+      <div class="row">
+        <div class="span4 offset12">
+          <a href="/session/new" class="btn">login</a> or <a href="/user/new" class="btn primary">join</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
