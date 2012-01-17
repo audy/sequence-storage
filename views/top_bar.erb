@@ -8,13 +8,15 @@
       <a href="/" class="brand">
         Sequences
       </a>
-      
-      
 
+      <% if user %>
+      
       <ul class="nav">
         <li class="<%= 'active' if path =~ /^experiment/ %>"><a href="/experiments">Experiments</a></li>
         <li class="<%= 'active' if path =~ /^user/ %>"><a href="/users">Users</a></li>
       </ul>
+      
+      <% end %>
       
       <ul class="nav secondary-nav">
         <% if !user %>

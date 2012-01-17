@@ -1,28 +1,36 @@
 <% if !@experiment.nil? %>
   <div class="page-header">
     <h1><%= @experiment.name %></h1>
+    <p>Created: <%= pretty_time @experiment.created_at %></p>
   </div>
   
   <div class="row">
     <div class="span16">
-      <p>Created: <%= pretty_time @experiment.created_at %></p>
   
       <% if @experiment.users.length == 0 %>
         <p>This experiment is an orphan!</p>
-      <% else %>  
-        <ul>Owner(s)</ul>
+      <% else %>
+        <h2>Owners</h2>
+        <ul class="undecorated"></ul>
           <% @experiment.users.each do |user| %>
-            <li><%= user %></li>
+            <li><a href="/user/<%= user.id %>"><%= user.name %></a></li>
             <% user.inspect %>
           <% end %>
         </ul>
       <% end %>
-  
-      <p><%= @experiment.description || 'no description' %></p>
+      
+      <hr/>
+      
+      <h2>Description</h2>
+      
+      <blockquote>
+      <%= @experiment.description || 'no description' %>
+      </blockquote>
       
       <% if session[:user_id] %>
-        <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'delete' %>
+        <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'Delete', :class => 'btn danger' %>
       <% end %>
+
     </div>
   </div>
 <% else %>

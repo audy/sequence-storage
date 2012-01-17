@@ -19,6 +19,11 @@ helpers do
     size = args[:size] || 100
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}&d=monsterid"
   end
+
+  def not_logged_in
+    redirect '/'
+  end
+
 end
 
 ##
@@ -32,11 +37,19 @@ end
 # Experiments
 #
 get '/experiments?/?' do
+  
+  user = User.get(session[:user_id])
+  not_logged_in unless user
+  
   @experiments = Experiment.all
   erb :experiments
 end
 
 get '/experiment/new' do
+  
+  user = User.get(session[:user_id])
+  not_logged_in unless user
+  
   erb :experiment_new
 end
 
@@ -44,20 +57,15 @@ post '/experiment/new' do
   
   # first verify that user is logged in
   user = User.get(session[:user_id])
-  unless user
-    session[:error] = "You must be logged-in to do that!"
-    redirect '/'
-  end
+  not_logged_in unless user
   
   experiment = Experiment.new
   experiment.name = params[:name]
   experiment.description = params[:description]
   
-  # assign user to experiment
   experiment.users << user
   
   if experiment.valid?
-    experiment.save
     session[:flash] = "Created a new experiment!"
     redirect "/experiment/#{experiment.id}"
   else
@@ -66,25 +74,14 @@ post '/experiment/new' do
   end
 end
 
-get '/experiment/try' do
-  
-  user = User.get 1
-  experiment = Experiment.get 1
-  experiment2 = Experiment.get 2 
-  
-  user.experiments << experiment
-  user.experiments << experiment2
-  user.save
-  
-  experiment.users << user
-  experiment.save
-  
-  experiment.users.get(1).email
-end
-
 get '/experiment/:id' do
+  
+  user = User.get(session[:user_id])
+  not_logged_in unless user
+  
   id = params[:id]
   @experiment = Experiment.get(id)
+  
   if !@experiment.nil?
     erb :experiment
   else
@@ -94,6 +91,10 @@ get '/experiment/:id' do
 end
 
 get '/experiment/:id/delete' do
+  
+  user = User.get(session[:user_id])
+  not_logged_in unless user
+  
   @experiment = Experiment.get params[:id]
   if @experiment.destroy
     session[:flash] = 'deleted!'
@@ -118,20 +119,32 @@ end
 #
 
 get '/users?/?' do
+  
+  user = User.get(session[:user_id])
+  not_logged_in unless user
+  
   @users = User.all
   erb :users
 end
 
 get '/user/new' do
+  
+  user = User.get(session[:user_id])
+  not_logged_in unless user
+  
   erb :user_new
 end
 
 get '/user/:id' do
+  
+  user = User.get(session[:user_id])
+  not_logged_in unless user
+  
   @user = User.get(params[:id])
   erb :user
 end
 
-post '/user/new' do
+post '/user/new' do  
   user = User.new
   user.name = params[:name]
   user.password = params[:password]
@@ -171,7 +184,7 @@ post '/session/new' do
   
 end
 
-get '/session.destroy' do
+get '/session/destroy' do
   session.clear
   session[:flash] = "Succesfully logged-out"
   redirect '/'
