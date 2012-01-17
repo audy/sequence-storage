@@ -14,6 +14,11 @@ Webrat.configure do |config|
 end
 
 RSpec.configure do |config|
+  
+  def app
+    Sinatra::Application
+  end
+  
   config.before(:each) { DataMapper.auto_migrate! }
   config.include Rack::Test::Methods
   config.include Webrat::Matchers
