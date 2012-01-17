@@ -1,7 +1,38 @@
 <% if @user %>
-  <a href="http://gravatar.com/emails"><img src="<%= gravatar(:email => @user[:email], :size => 100) %>"></a>
-	<h2><%= @user.name %></h2>
-	<%= link_tag to: "mailto:" + @user.email, name: @user.email %>
+  <div class="page-title">
+  	<h1><%= @user.name %></h1>
+  </div>
+  
+  <div class="row">
+    <div class="span16">
+      <a href="http://gravatar.com/emails"><img src="<%= gravatar(:email => @user[:email], :size => 100) %>"></a>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span16">
+    	<%= link_tag to: "mailto:" + @user.email, name: @user.email %>
+    </div>
+  </div>
 <% else %>
-	<p>That user doesn't exist!</p>
+  <div class="row">
+    <div class="span16">
+    	<p>That user doesn't exist!</p>
+    </div>
+  </div>
 <% end %>
+
+<hr/>
+
+<div class="row">
+  <div class="span16">
+    <h2>Experiments:</h2>
+
+    <%= "#{@user.name} has not created any experiments." if @user.experiments.length == 0 %>
+    <ul>
+      <% @user.experiments.each do |experiment| %>
+        <li><a href="/experiment/<%= experiment.id %>"><%= experiment.name %></a></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
