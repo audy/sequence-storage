@@ -1,7 +1,6 @@
 require './environment.rb'
 
-helpers do
-  
+helpers do  
   # compose a link tag
   def link_tag(args={})
     $stderr.puts
@@ -20,10 +19,13 @@ helpers do
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{size}&d=monsterid"
   end
 
-  def not_logged_in
-    redirect '/'
+  def authenticate!
+    redirect '/' unless @user
   end
+end
 
+before do
+  @user = User.get(session[:user_id])
 end
 
 ##
@@ -36,34 +38,26 @@ end
 ##
 # Experiments
 #
-get '/experiments?/?' do
-  
-  user = User.get(session[:user_id])
-  not_logged_in unless user
+get '/experiments?/?' do  
+  authenticate!
   
   @experiments = Experiment.all
   erb :experiments
 end
 
 get '/experiment/new' do
-  
-  user = User.get(session[:user_id])
-  not_logged_in unless user
-  
+  authenticate!
   erb :experiment_new
 end
 
 post '/experiment/new' do
-  
-  # first verify that user is logged in
-  user = User.get(session[:user_id])
-  not_logged_in unless user
+  authenticate!
   
   experiment = Experiment.new
   experiment.name = params[:name]
   experiment.description = params[:description]
   
-  experiment.users << user
+  experiment.users << @user
   
   if experiment.valid?
     session[:flash] = "Created a new experiment!"
@@ -75,9 +69,7 @@ post '/experiment/new' do
 end
 
 get '/experiment/:id' do
-  
-  user = User.get(session[:user_id])
-  not_logged_in unless user
+  authenticate!
   
   id = params[:id]
   @experiment = Experiment.get(id)
@@ -91,9 +83,7 @@ get '/experiment/:id' do
 end
 
 get '/experiment/:id/delete' do
-  
-  user = User.get(session[:user_id])
-  not_logged_in unless user
+  authenticate!
   
   @experiment = Experiment.get params[:id]
   if @experiment.destroy
@@ -104,43 +94,24 @@ get '/experiment/:id/delete' do
   end
 end
 
-
-##
-# Sessions
-#
-get '/session/destroy' do
-  session[:user_id] = nil
-  session[:flash] = 'logged out'
-  redirect '/'
-end
-
 ##
 # Users
 #
-
 get '/users?/?' do
-  
-  user = User.get(session[:user_id])
-  not_logged_in unless user
+  authenticate!
   
   @users = User.all
   erb :users
 end
 
 get '/user/new' do
-  
-  user = User.get(session[:user_id])
-  not_logged_in unless user
-  
+  # TODO implement some kind of invitation code thing
   erb :user_new
 end
 
 get '/user/:id' do
-  
-  user = User.get(session[:user_id])
-  not_logged_in unless user
-  
-  @user = User.get(params[:id])
+  authenticate!
+  @view_user = User.get(params[:id])
   erb :user
 end
 

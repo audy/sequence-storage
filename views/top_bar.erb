@@ -1,4 +1,3 @@
-<% user = User.get(session[:user_id]) rescue nil %>
 <% path = request.path_info.split('/')[1] %>
 
 <div class="topbar">
@@ -9,7 +8,7 @@
         Sequences
       </a>
 
-      <% if user %>
+      <% if @user %>
       
       <ul class="nav">
         <li class="<%= 'active' if path =~ /^experiment/ %>"><a href="/experiments">Experiments</a></li>
@@ -19,10 +18,10 @@
       <% end %>
       
       <ul class="nav secondary-nav">
-        <% if !user %>
+        <% if !@user %>
           <li class="<%= 'active' if path =~ /^session/%>"><a href="/session/new">Login</a></li>
         <% else %>
-          <li><a href="/user/<%= user.id %>"><%= user.name %></a></li>
+          <li><a href="/user/<%= @user.id %>"><%= @user.name %></a></li>
           <li><a href="/session/destroy">logout</a></li>
         <% end %>
       </ul>
