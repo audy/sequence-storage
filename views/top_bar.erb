@@ -22,7 +22,7 @@
           <li class="<%= 'active' if path =~ /^session/%>"><a href="/session/new">Login</a></li>
         <% else %>
           <li><a href="/user/<%= @user.id %>"><%= @user.name %></a></li>
-          <li><a href="/session/destroy">logout</a></li>
+          <li><a href="/session/destroy">Logout</a></li>
         <% end %>
       </ul>
         
