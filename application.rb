@@ -55,16 +55,19 @@ post '/experiment/new' do
 end
 
 get '/experiment/try' do
+  
   user = User.get 1
   experiment = Experiment.get 1
+  experiment2 = Experiment.get 2 
   
   user.experiments << experiment
+  user.experiments << experiment2
   user.save
   
   experiment.users << user
   experiment.save
   
-  experiment.users.to_s
+  experiment.users.get(1).email
 end
 
 get '/experiment/:id' do
