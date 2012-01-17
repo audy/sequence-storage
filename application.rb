@@ -54,6 +54,19 @@ post '/experiment/new' do
   end
 end
 
+get '/experiment/try' do
+  user = User.get 1
+  experiment = Experiment.get 1
+  
+  user.experiments << experiment
+  user.save
+  
+  experiment.users << user
+  experiment.save
+  
+  experiment.users.to_s
+end
+
 get '/experiment/:id' do
   id = params[:id]
   @experiment = Experiment.get(id)
@@ -74,6 +87,7 @@ get '/experiment/:id/delete' do
     session[:error] = 'something went wrong?!'
   end
 end
+
 
 ##
 # Sessions
