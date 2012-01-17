@@ -53,10 +53,10 @@ post '/experiment/new' do
   experiment.name = params[:name]
   experiment.description = params[:description]
   
+  # assign user to experiment
   experiment.users << user
   
-  if experiment.valid?
-    experiment.save
+  if experiment.save
     session[:flash] = "Created a new experiment!"
     redirect "/experiment/#{experiment.id}"
   else
