@@ -60,6 +60,7 @@ post '/experiment/new' do
   experiment.users << @user
   
   if experiment.valid?
+    experiment.save
     session[:flash] = "Created a new experiment!"
     redirect "/experiment/#{experiment.id}"
   else
