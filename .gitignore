@@ -2,3 +2,4 @@
 config/
 Gemfile.lock
 db/*
+*.log
