@@ -1,24 +1,30 @@
-<%= link_tag :to => '/experiments', :name => 'back' %>
-
 <% if !@experiment.nil? %>
-  <h1><%= @experiment.name %></h1>
-  <p>Created: <%= pretty_time @experiment.created_at %></p>
+  <div class="page-header">
+    <h1><%= @experiment.name %></h1>
+  </div>
   
-  <% if @experiment.users.length == 0 %>
-    <p>This experiment is an orphan!</p>
-  <% else %>  
-    <ul>Owner(s)</ul>
-      <% @experiment.users.each do |user| %>
-        <li><%= user %></li>
-        <% user.inspect %>
+  <div class="row">
+    <div class="span16">
+      <p>Created: <%= pretty_time @experiment.created_at %></p>
+  
+      <% if @experiment.users.length == 0 %>
+        <p>This experiment is an orphan!</p>
+      <% else %>  
+        <ul>Owner(s)</ul>
+          <% @experiment.users.each do |user| %>
+            <li><%= user %></li>
+            <% user.inspect %>
+          <% end %>
+        </ul>
       <% end %>
-    </ul>
-  <% end %>
   
-  <p><%= @experiment.description || 'no description' %></p>
-  <% if session[:user_id] %>
-  <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'delete' %>
-  <% end %>
+      <p><%= @experiment.description || 'no description' %></p>
+      
+      <% if session[:user_id] %>
+        <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'delete' %>
+      <% end %>
+    </div>
+  </div>
 <% else %>
   <p>no such experiment <%= params[:id] %></p>
 <% end %>
