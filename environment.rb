@@ -9,13 +9,21 @@ require 'bcrypt'
 # Local stuff
 require './models.rb'
 
-# Setup environment
-# ENV can be :development or :production
-# This isn't really being used at the moment
-ENVIRONMENT = ENV['SINATRA_ENV'] || :development
+set :environment, :development
+set :root, File.expand_path(File.dirname(__FILE__))
+
+case settings.environment
+  when :production
+    set :db_url, ENV['DATABASE_URL']
+  when :development
+    set :db_url, "sqlite3://#{settings.root}/db/development.db"
+    require 'sinatra/reloader'
+end
+
+$stderr.puts settings.db_url.inspect
 
 # Setup Database
 DataMapper.finalize
-DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite3://' + File.expand_path(File.dirname(__FILE__)) + '/db/development.db')
+DataMapper.setup(:default, settings.db_url)
 
 enable :sessions
