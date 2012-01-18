@@ -142,21 +142,21 @@ end
 post '/session/new' do
   email, password = params[:email], params[:password]
   user = User.authenticate(email, password)
-  
+  his = %w[Yo Howdy Hey Hi Hello]
   if user
     session[:user_id] = user.id
-    session[:flash] = "Hello, #{user.name}!"
+    session[:flash] = "#{his.sample}, #{user.name}!"
     redirect '/'
   else
     session[:error] = "Invalid"
     redirect '/session/new'
   end
-  
 end
 
 get '/session/destroy' do
+  byes = %w[Bye Cya Later Ciao Sayonara]
   session.clear
-  session[:flash] = "Succesfully logged-out"
+  session[:flash] = "#{byes.sample}, #{@user.name}!"
   redirect '/'
 end
 
