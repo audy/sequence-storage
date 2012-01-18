@@ -29,7 +29,7 @@
                 <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
               </td>
               <td>
-                <%= experiment.description.first 300 rescue 'n/a' %>
+                <%= experiment.description[0..300] rescue 'N/A' %>
               </td>
             </tr>
           <% end %>

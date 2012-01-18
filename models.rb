@@ -2,6 +2,7 @@
 #
 class Experiment
   include DataMapper::Resource
+  include DataMapper::Validate
   
   property :id,          Serial
   property :created_at,  DateTime
@@ -20,6 +21,7 @@ end
 # 
 class User
   include DataMapper::Resource
+  include DataMapper::Validate
   include BCrypt
   
   attr_accessor :password
@@ -56,7 +58,7 @@ class User
   private
   
     def password_required
-      crypted_password.blank? || password.present?
+      !(crypted_password.nil? || password.nil?)
     end
   
     def encrypt_password
