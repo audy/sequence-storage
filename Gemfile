@@ -9,4 +9,4 @@ gem "rspec", "1.3.2"
 gem "rack-test"
 
 gem "webrat"
-gem "sinatra/reloader"
+gem "sinatra-reloader"
