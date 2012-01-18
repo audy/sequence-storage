@@ -28,8 +28,7 @@ describe 'Experiment Model' do
   it 'can be given owners' do
     user = User.new(:email => 'test@test.com', :name => 'Testy McTesterson')
     experiment.users << user
-    experiment.save
-    experiment.users.should_not be_nil
+    experiment.save.should_not be_false
   end
   
 end
@@ -72,7 +71,7 @@ describe 'User Model' do
   
   it 'can be given experiments' do
     user.experiments << Experiment.new(:name => 'test')
-    user.save
+    user.save.should_not be_false
     user.experiments.should_not be_nil
   end
   

@@ -19,11 +19,18 @@ describe 'The homepage' do
 end
 
 describe '/users' do
+  
   let (:user) { User.create :name => "test_user", :email => "test@test.com", :password => 'test' }
-
+  let (:login!) {
+    visit '/session/new'
+    fill_in 'email', :with => user.email
+    fill_in 'password', :with => user.password
+    click_button "Login"
+  }
+  
+  
   it 'should list users' do
-    user
-    get '/users'
+    login!
     response_body.should contain user.name
   end
 end

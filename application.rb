@@ -3,7 +3,6 @@ require './environment.rb'
 helpers do  
   # compose a link tag
   def link_tag(args={})
-    $stderr.puts
     "<a href=\"#{args[:to]}\"" + " class=\"#{args[:class]}\" " + ">#{args[:name]}</a>"
   end
   
@@ -53,18 +52,17 @@ end
 post '/experiment/new' do
   authenticate!
   
-  experiment = Experiment.new
-  experiment.name = params[:name]
-  experiment.description = params[:description]
-  
+  experiment = Experiment.create(params)
   experiment.users << @user
   
-  if experiment.valid?
-    experiment.save
+  $stderr.puts @user.save
+  $stderr.puts @user.errors.inspect
+  
+  if experiment.save
     session[:flash] = "Created a new experiment!"
     redirect "/experiment/#{experiment.id}"
   else
-    session[:error] = "Something went wrong"
+    session[:error] = "Error?!"
     redirect '/experiment/new'
   end
 end

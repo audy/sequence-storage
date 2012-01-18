@@ -35,7 +35,7 @@ class User
   
   validates_uniqueness_of    :email,    :case_sensitive => false
   validates_format_of        :email,    :with => :email_address
-  validates_presence_of      :password
+  validates_presence_of      :password, :if => :password_required
   validates_presence_of      :name
   
   ##
@@ -54,6 +54,11 @@ class User
   before :save, :encrypt_password
   
   private
+  
+    def password_required
+      crypted_password.blank? || password.present?
+    end
+  
     def encrypt_password
       self.crypted_password = Password.create(password)
     end
