@@ -1,13 +1,14 @@
-<div id="page-header">
-  <h1>Results for "<%= params[:q]%>"</h1>
+<div class="page-header">
+  <h1>Found <%= @results.length %> results for: "<%= params[:q]%>"</h1>
 </div>
-
 <ul>
-<% @results.each do |result| %>
-  <% if result.model == User %>
-    <li>User, <a href="/user/<%= result.id %>"><%= result.name %></a></li>
-  <% elsif result.model == Experiment %>
-    <li>Experiment: <a href="/experiment/<%= result.id %>"><%= result.name %></a> - <%= result.description %></li>
+<% if @results.length > 0 %>
+  <% @results.each do |result| %>
+    <% if result.model == User %>
+      <li>User, <a href="/user/<%= result.id %>"><%= result.name %></a></li>
+    <% elsif result.model == Experiment %>
+      <li>Experiment: <a href="/experiment/<%= result.id %>"><%= result.name %></a> - <%= result.description %></li>
+    <% end %>
   <% end %>
-<% end %>
 </ul>
+<% end %>
