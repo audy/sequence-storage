@@ -93,6 +93,36 @@ get '/experiment/:id/delete' do
   end
 end
 
+get '/experiment/:id/edit' do
+  authenticate!
+  
+  @experiment = Experiment.get params[:id]
+  if @experiment.nil?    										#if there is no experiment with that id
+    session[:error] = "no such experiment \'#{params[:id]}\'"
+    redirect '/experiments'
+  else
+    if @experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
+      "You cannot edit this experiment because you are not a owner"
+    else
+      erb :experiment_edit
+    end
+  end
+end
+
+post '/experiment/edit' do
+
+  experiment = Experiment.get(params[:id])
+  experiment.inspect
+  if experiment.update(:name => params[:name], :description => params[:description])
+    session[:flash] = "Experiment updated!"
+    redirect "/experiment/#{experiment.id}"
+  else
+    session[:error] = "Update Error?! Please check fields again"
+    redirect '/experiment/new'
+  end
+end
+
+
 ##
 # Users
 #

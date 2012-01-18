@@ -1,0 +1,30 @@
+<div class="span8 offset4">
+    
+    <form action="/experiment/edit" method="post">
+      <fieldset>
+        <legend>Edit Experiment</legend>
+        <div class="clearfix">
+          <label for="name">Name</label>
+          <div class="input">
+            <input class="xlarge" name="name" id="name" type="text" value="<%= @experiment.name %>"/>
+          </div>
+        </div>
+        
+        <div class="clearfix">
+          <label for="description">Description</label>
+          <div class="input">
+            <textarea class="xlarge" name="description" rows="10" ><%= @experiment.description %></textarea>
+            <span class="help-inline">Describe the experiment (Optional)</span>
+          </div>
+        </div>
+        <input type="hidden" id="id" name="id" value="<%= @experiment.id %>">
+      </fieldset>
+      
+      <div class="actions">
+        <input type="submit" value="Save" class="btn primary"/>
+        <a class="btn" onclick="history.go(-1)">Cancel</a>
+      </div>
+    </form>
+    
+  </div>
+</div>
