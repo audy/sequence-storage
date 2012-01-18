@@ -164,6 +164,7 @@ end
 # Searching
 #
 get '/search/?' do
+  authenticate!
   $stderr.puts params
   query = params[:q]
   @results = Set.new
