@@ -15,6 +15,10 @@
         <li class="<%= 'active' if path =~ /^user/ %>"><a href="/users">Users</a></li>
       </ul>
       
+      <form class="pull-left" action="/search/" method="get">
+        <input type="text" name="q" placeholder="<%= params[:q] ? params[:q] : 'Search' %>" />
+      </form>
+      
       <% end %>
       
       <ul class="nav secondary-nav">
