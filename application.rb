@@ -132,7 +132,7 @@ get '/experiment/:id/add_owner' do
     session[:error] = "no such experiment \'#{params[:id]}\'"
     redirect '/experiments'
   else
-    if !@experiment.users.include? @user
+    if @experiment.users.include? @user
       session[:error] = "You cannot edit this experiment because you are not a owner"
       redirect '/experiments'
     else
@@ -236,7 +236,7 @@ end
 get '/search/?' do
   authenticate!
   $stderr.puts params
-  query = params[:q]
+  query = "%#{params[:q]}%"
   @results = Set.new
   @results = (User.all(:name.like => query) | User.all(:email.like => query)).to_set + (Experiment.all(:name.like => query) | Experiment.all(:description.like => query)).to_set
   erb :search
