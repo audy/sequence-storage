@@ -1,0 +1,51 @@
+<div class="page-header">
+  <h1>Choose which user to add to owner</h1>
+</div>
+<div class="row">
+  <div class="span16">
+    <% @users = User.all(:id.not => session[:user_id]) %>
+    <% if @users.length == 0 %>
+      <p>There are no users! <%= link_tag(:to => '/user/new', :name => 'create one!')%></p>
+    <% end %>
+  </div>
+</div>
+  
+<div class="row">  
+  <div class="span16">  
+    <table class="bordered-table zebra-striped">
+      <thead>
+        <tr>
+          <th><!-- icon--></th>
+          <th>
+            Name
+          </th>
+          <th>
+            E-Mail
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td>
+              <img src="<%= gravatar(:email => user[:email], :size => 16) %>">
+            </td>
+            <td>
+              <%= link_tag(:to=>"/user/#{user.id}", :name => user.name) %>
+            </td>
+            <td>
+              <%= link_tag(:to=>"mailto:#{user.email}", :name => user.email) %>
+            </td>
+            <td>
+              <form action="/experiment/add_owner" method="post">
+                <input type="hidden" id="new_owner_id" name="new_owner_id" value="<%= user.id %>">
+                <input type="hidden" id="experiment_id" name="experiment_id" value="<%= @experiment.id %>">
+                <input type="submit" value="Add">
+              </form>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

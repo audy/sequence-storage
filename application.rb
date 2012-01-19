@@ -102,7 +102,8 @@ get '/experiment/:id/edit' do
     redirect '/experiments'
   else
     if @experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
-      "You cannot edit this experiment because you are not a owner"
+      session[:error] = "You cannot edit this experiment because you are not a owner"
+      redirect '/experiments'
     else
       erb :experiment_edit
     end
@@ -110,18 +111,57 @@ get '/experiment/:id/edit' do
 end
 
 post '/experiment/edit' do
-
+  authenticate!
+  
   experiment = Experiment.get(params[:id])
-  experiment.inspect
+  
   if experiment.update(:name => params[:name], :description => params[:description])
     session[:flash] = "Experiment updated!"
     redirect "/experiment/#{experiment.id}"
   else
     session[:error] = "Update Error?! Please check fields again"
-    redirect '/experiment/new'
+    redirect '/experiments'
   end
 end
 
+get '/experiment/:id/add_owner' do
+  authenticate!
+  
+  @experiment = Experiment.get params[:id]
+  if @experiment.nil?    										#if there is no experiment with that id
+    session[:error] = "no such experiment \'#{params[:id]}\'"
+    redirect '/experiments'
+  else
+    if @experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
+      session[:error] = "You cannot edit this experiment because you are not a owner"
+      redirect '/experiments'
+    else
+      erb :experiment_add_owner
+    end
+  end
+end
+
+post '/experiment/add_owner' do
+  authenticate!
+  
+  new_owner = User.get(params[:new_owner_id])
+  experiment = Experiment.get(params[:experiment_id])
+  user = User.get(session[:user_id])
+  experiment.users << new_owner
+  experiment.save
+  
+  redirect "/experiment/#{params[:experiment_id]}"
+  
+  #new_owner.update(experiments => experiment)
+  #if experiment.save
+  #  session[:flash] = "Owner added!"
+  #  redirect "/experiment/#{experiment.id}"
+  #else
+  #  session[:error] = "Update Error?! Please check fields again"
+  #  redirect '/experiments'
+  #end
+  
+end
 
 ##
 # Users
