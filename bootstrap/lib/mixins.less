@@ -174,7 +174,7 @@
     background-image: linear-gradient(left, @startColor, @endColor); // Le standard
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",@startColor,@endColor)); // IE9 and down
   }
-  .vertical (@startColor: #555, @endColor: #333, @image: '') {
+  .vertical (@startColor: #555, @endColor: #333, @image: none) {
     background-color: @endColor;
     background-repeat: repeat-x;
     background-image: @image, -khtml-gradient(linear, left top, left bottom, from(@startColor), to(@endColor)); // Konqueror
