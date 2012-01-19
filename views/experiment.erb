@@ -1,8 +1,8 @@
 <% if !@experiment.nil? %>
   <div class="page-header">
     <h1><%= @experiment.name %></h1>
-    <p>Created: <%= pretty_time @experiment.created_at %></p>
   </div>
+  <p>Created: <%= pretty_time @experiment.created_at %></p>
   
   <div class="row">
     <div class="span16">
@@ -11,27 +11,33 @@
         <p>This experiment is an orphan!</p>
       <% else %>
         <h2>Owners</h2>
-        <ul class="undecorated"></ul>
+        <ul class="undecorated">
           <% @experiment.users.each do |user| %>
             <li><a href="/user/<%= user.id %>"><%= user.name %></a></li>
             <% user.inspect %>
           <% end %>
         </ul>
       <% end %>
-      
-      <hr/>
-      
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span16">
       <h2>Description</h2>
       
       <blockquote>
-      <%= @experiment.description || 'no description' %>
+        <%= @experiment.description || 'no description' %>
       </blockquote>
-      
-      <% if session[:user_id] %>
-        <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'Delete', :class => 'btn danger' %>
-        <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn info' %>
-        <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn info' %>
-      <% end %>
+    </div>
+  </div>
+
+      <div class="actions">
+        <% if session[:user_id] %>
+          <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
+          <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn primary' %>
+          <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'Delete', :class => 'btn danger' %>
+        <% end %>
+      </div>
 
     </div>
   </div>
