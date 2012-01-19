@@ -37,11 +37,19 @@
               <%= link_tag(:to=>"mailto:#{user.email}", :name => user.email) %>
             </td>
             <td>
-              <form action="/experiment/add_owner" method="post">
-                <input type="hidden" id="new_owner_id" name="new_owner_id" value="<%= user.id %>">
-                <input type="hidden" id="experiment_id" name="experiment_id" value="<%= @experiment.id %>">
-                <input type="submit" value="Add">
-              </form>
+              <%  if @experiment.users.first(:id => user.id).nil? %>
+                <form action="/experiment/add_owner" method="post">
+                  <input type="hidden" id="new_owner_id" name="new_owner_id" value="<%= user.id %>">
+                  <input type="hidden" id="experiment_id" name="experiment_id" value="<%= @experiment.id %>">
+                  <input type="submit" value="Add">
+                </form>
+              <% else %>
+                  <form action="/experiment/remove_owner" method="post">
+                  <input type="hidden" id="owner_id" name="owner_id" value="<%= user.id %>">
+                  <input type="hidden" id="experiment_id" name="experiment_id" value="<%= @experiment.id %>">
+                  <input type="submit" value="Remove">
+                </form>         
+              <% end %>
             </td>
           </tr>
         <% end %>

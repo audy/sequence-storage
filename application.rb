@@ -163,6 +163,25 @@ post '/experiment/add_owner' do
   
 end
 
+post '/experiment/remove_owner' do
+  authenticate!
+  
+  owner_id = params[:owner_id]
+  owner = User.get(owner_id)
+  experiment = Experiment.get(params[:experiment_id])
+  
+  link = experiment.experiment_users.first(:user => owner)
+  
+  if link.destroy
+    session[:flash]="Owner Removed!"
+    redirect "/experiments"
+  else
+    session[:error] = "Error removing owner?"
+    redirect '/experiments'
+  end
+end
+
+
 ##
 # Users
 #
@@ -236,7 +255,7 @@ end
 get '/search/?' do
   authenticate!
   $stderr.puts params
-  query = params[:q]
+  query = '%'+params[:q]+'%'
   @results = Set.new
   @results = (User.all(:name.like => query) | User.all(:email.like => query)).to_set + (Experiment.all(:name.like => query) | Experiment.all(:description.like => query)).to_set
   erb :search
