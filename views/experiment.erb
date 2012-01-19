@@ -29,7 +29,8 @@
       
       <% if session[:user_id] %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'Delete', :class => 'btn danger' %>
-        <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn danger' %>
+        <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn info' %>
+        <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn info' %>
       <% end %>
 
     </div>
