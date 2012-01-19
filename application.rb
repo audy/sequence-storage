@@ -37,6 +37,7 @@ end
 ##
 # Experiments
 #
+
 get '/experiments?/?' do  
   authenticate!
   
@@ -115,7 +116,7 @@ post '/experiment/edit' do
   
   experiment = Experiment.get(params[:id])
   
-  if experiment.update(:name => params[:name], :description => params[:description])
+  if experiment.update(:name => params[:name], :description => params[:description], :update_at => Time.now)
     session[:flash] = "Experiment updated!"
     redirect "/experiment/#{experiment.id}"
   else
@@ -132,7 +133,8 @@ get '/experiment/:id/add_owner' do
     session[:error] = "no such experiment \'#{params[:id]}\'"
     redirect '/experiments'
   else
-    if @experiment.users.include? @user
+    ## if @experiment.users.include? @user
+    if @experiment.users.first(:id => @user.id).nil?
       session[:error] = "You cannot edit this experiment because you are not a owner"
       redirect '/experiments'
     else
@@ -301,4 +303,5 @@ post '/download' do
     redirect '/'
   end
 end
+
 

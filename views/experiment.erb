@@ -3,7 +3,10 @@
     <h1><%= @experiment.name %></h1>
   </div>
   <p>Created: <%= pretty_time @experiment.created_at %></p>
-  
+  <% update_time = @experiment.update_at %>
+  <% if !update_time.nil? %>
+    <p>Updated Last: <%= pretty_time @experiment.update_at%></p>
+  <% end %>
   <div class="row">
     <div class="span16">
   
@@ -35,7 +38,7 @@
       <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
       <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn primary' %>
       <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'Delete', :class => 'btn danger' %>
-    <% end %>
+ <% end %>
   </div>
 
 <% else %>
