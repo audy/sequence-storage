@@ -132,7 +132,7 @@ get '/experiment/:id/add_owner' do
     session[:error] = "no such experiment \'#{params[:id]}\'"
     redirect '/experiments'
   else
-    if @experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
+    if !@experiment.users.include? @user
       session[:error] = "You cannot edit this experiment because you are not a owner"
       redirect '/experiments'
     else
