@@ -37,7 +37,6 @@ namespace :db do
   desc "auto migrate the database"
   task :automigrate do
     load 'environment.rb'
-    fail "never auto_migrate! on the production server!" if ENVIRONMENT == :production
     DataMapper.auto_migrate!
   end
 end
