@@ -29,7 +29,6 @@ namespace :db do
   task :create do
     load 'environment.rb'
     config = DataMapper.repository.adapter.options.symbolize_keys
-    $stderr.puts config.inspect
     DataMapper.setup(DataMapper.repository.name, config)
     
   end
