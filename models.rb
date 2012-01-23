@@ -11,6 +11,7 @@ class Experiment
   property :name,        String
   property :description, Text
   
+  has n, :files
   has n, :users, :through => Resource
   
   validates_presence_of :name
@@ -65,3 +66,27 @@ class User
       self.crypted_password = Password.create(password)
     end
 end
+
+
+# The File Model
+# 
+class File
+  include DataMapper::Resource
+  include DataMapper::Validate
+  
+  property :id, 		Serial
+  property :name, 		String
+  property :size, 		Integer
+  property :created_at, DateTime
+  property :path,   	String
+  property :md5sum,		String
+  
+  belongs_to :experiment
+  
+end
+  
+  
+  
+  
+  
+  
