@@ -36,6 +36,8 @@ class User
   
   has n, :experiments, :through => Resource
   
+  has n, :datasets
+  
   validates_uniqueness_of    :email,    :case_sensitive => false
   validates_format_of        :email,    :with => :email_address
   validates_presence_of      :password, :if => :password_required
@@ -78,10 +80,10 @@ class Dataset
   property :name, 		String
   property :size, 		Integer
   property :created_at, DateTime
-  property :created_by, Integer
   property :path,   	String
   property :mdsum,		String
   
+  belongs_to :user
   belongs_to :experiment
   
 end

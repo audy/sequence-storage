@@ -1,0 +1,23 @@
+<div class="span8 offset4">
+    
+    <form action="/experiment/add_file" method="post">
+      <fieldset>
+        <legend>Add Dataset file</legend>
+        <div class="clearfix">
+          <label for="name">File Name</label>
+          <div class="input">
+            <input class="xlarge" name="name" id="name" type="text" value="<%= @experiment.name %>"/>
+          </div>
+        </div>
+
+        <input type="hidden" id="id" name="id" value="<%= @experiment.id %>">
+      </fieldset>
+      
+      <div class="actions">
+        <input type="submit" value="Save" class="btn primary"/>
+        <a class="btn" onclick="history.go(-1)">Cancel</a>
+      </div>
+    </form>
+    
+  </div>
+</div>

@@ -42,7 +42,7 @@
         <h2>Files</h2>
         <ul class="undecorated">
           <% @experiment.datasets.each do |file| %>
-            <li><a href="/file/<%= file.id %>"><%= file.name %> - <%= file.created_at%> - <%= User.get(file.created_by).name %></a></li>
+            <li><a href="/file/<%= file.id %>"><%= file.name %> - <%= file.created_at%> - <%= file.user.name %></a></li>
           <% end %>
         </ul>
       <% end %>

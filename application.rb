@@ -404,12 +404,11 @@ post '/experiment/add_file' do
   file = Dataset.new
   file.name = params[:name]
   file.size = 100 
-  file.created_at = Time.now
-  file.created_by = session[:user_id]
   file.path = "file"
   file.mdsum = "ok"
   file.experiment = Experiment.get(params[:id])
-
+  file.user = User.get(session[:user_id])
+  
   if file.valid?
     file.save
     redirect "/experiment/#{file.experiment.id}" 

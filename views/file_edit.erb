@@ -1,0 +1,23 @@
+<div class="span8 offset4">
+    
+    <form action="/file/edit" method="post">
+      <fieldset>
+        <legend>Edit dataset File</legend>
+        <div class="clearfix">
+          <label for="name">Name</label>
+          <div class="input">
+            <input class="xlarge" name="name" id="name" type="text" value="<%= @file.name %>"/>
+          </div>
+        </div>
+        
+        <input type="hidden" id="file_id" name="file_id" value="<%= @file.id %>">
+      </fieldset>
+      
+      <div class="actions">
+        <input type="submit" value="Save" class="btn primary"/>
+        <a class="btn" onclick="history.go(-1)">Cancel</a>
+      </div>
+    </form>
+    
+  </div>
+</div>
