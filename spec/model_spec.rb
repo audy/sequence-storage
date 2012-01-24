@@ -46,7 +46,12 @@ end
 
 describe 'User Model' do
   
-  let(:user) { User.new(:email => 'test@test.com', :name => 'Testy McTesterson') }
+  let(:user) {
+    User.new(
+      :email => 'test@test.com',
+      :name => 'Testy McTesterson'
+    )
+  }
   
   it 'can be created' do
     user.should_not be_nil
@@ -86,7 +91,8 @@ describe 'User Model' do
     user.experiments.should_not be_nil
   end
   
-  it 'should update' do 
+  it 'should update' do
+    user.save
     user.update(:name => 'updated name')
   end
   
