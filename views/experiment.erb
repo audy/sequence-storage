@@ -33,15 +33,31 @@
     </div>
   </div>
 
-  <div class="actions">
-    <% if session[:user_id] %>
-      <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
-      <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn primary' %>
-      <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'Delete', :class => 'btn danger' %>
-      <%= link_tag :to => "/experiment/#{@experiment.id}/add_file", :name => 'Add File', :class => 'btn danger' %>
-      
- <% end %>
+  <div class="row">
+    <div class="span16">
+  
+      <% if @experiment.datasets.length == 0 %>
+        <p>No files!</p>
+      <% else %>
+        <h2>Files</h2>
+        <ul class="undecorated">
+          <% @experiment.datasets.each do |file| %>
+            <li><a href="/file/<%= file.id %>"><%= file.name %> - <%= file.created_at%> - <%= User.get(file.created_by).name %></a></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
   </div>
+  <% if !@experiment.users.first(:id => @user.id).nil? %>
+    <div class="actions">
+      <% if session[:user_id] %>
+        <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
+        <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn primary' %>
+        <%= link_tag :to => "/experiment/#{@experiment.id}/add_file", :name => 'Add File', :class => 'btn primary' %> 
+        <%= link_tag :to => "/experiment/#{@experiment.id}/delete", :name => 'Delete', :class => 'btn danger' %> 
+ 	  <% end %>
+  </div>
+  <% end %>
 
 <% else %>
   <p>no such experiment <%= params[:id] %></p>

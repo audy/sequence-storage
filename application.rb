@@ -150,19 +150,13 @@ post '/experiment/add_owner' do
   experiment = Experiment.get(params[:experiment_id])
   user = User.get(session[:user_id])
   experiment.users << new_owner
-  experiment.save
+  if experiment.save
   
-  redirect "/experiment/#{params[:experiment_id]}"
-  
-  #new_owner.update(experiments => experiment)
-  #if experiment.save
-  #  session[:flash] = "Owner added!"
-  #  redirect "/experiment/#{experiment.id}"
-  #else
-  #  session[:error] = "Update Error?! Please check fields again"
-  #  redirect '/experiments'
-  #end
-  
+    redirect "/experiment/#{params[:experiment_id]}"
+  else
+    session[:error] = "Error adding new owner"
+    redirect '/experiments'
+  end 
 end
 
 post '/experiment/remove_owner' do
@@ -267,6 +261,7 @@ end
 ##
 # Uploading/Downloading
 get '/upload' do
+  authenticate!
   erb :upload
 end
 
@@ -305,3 +300,122 @@ post '/download' do
 end
 
 
+##
+# Files
+get '/file/:id' do
+  authenticate!
+  
+  @file = Dataset.get(params[:id])
+  
+  if @file.nil?
+    session[:error] = "no such file \'#{params[:id]}\'"
+    redirect '/experiments'
+  else
+    erb :file
+  end
+end
+
+post '/file/edit' do
+  
+  file = Dataset.get(params[:file_id])
+ 
+  if file.nil?
+    session[:error] = "Update not succesful!"
+    redirect '/experiments'
+  else
+    file.update(:name => params[:name]) 
+    redirect "/experiment/#{file.experiment.id}"    
+  end
+end
+
+get '/file/:id/edit' do
+  authenticate!
+  
+  @file = Dataset.get params[:id]
+  
+  if @file.experiment.users.first(:id => session[:user_id]).nil?
+    session[:error] = "You are not a owner, you can not modify"
+    redirect '/'
+  end
+   
+  if @file.nil?    										#if there is no file with that id
+    session[:error] = "no such file \'#{params[:id]}\'"
+    redirect '/experiments'
+  else
+    if @file.experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
+      session[:error] = "You cannot edit this file because you are not a owner"
+      redirect '/experiments'
+    else
+      erb :file_edit
+    end
+  end
+end
+
+get '/file/:id/delete' do
+  authenticate!
+  
+  @file = Dataset.get params[:id]
+  if @file.nil?
+    session[:error] = 'Dataset file not found!'
+    redirect '/experiments'
+  else  
+  
+    if @file.experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
+      session[:error] = "You cannot delete this file because you are not a owner"
+      redirect '/experiments'
+    end
+    experiment_id = @file.experiment.id
+  		
+    if @file.destroy
+      session[:flash] = 'deleted!'
+      redirect '/experiments'
+    else
+      session[:error] = 'something went wrong?!'
+    end
+  end
+end
+
+get '/experiment/:id/add_file' do
+  authenticate!
+  
+  @experiment = Experiment.get(params[:id])
+  
+  if @experiment.users.first(:id => session[:user_id]).nil?
+    session[:error] = "You are not a owner, you can not modify"
+    redirect '/'
+  end
+  
+  if @experiment.nil?    										#if there is no experiment with that id
+    session[:error] = "no such experiment \'#{params[:id]}\'"
+    redirect '/experiments'
+  else
+    erb :experiment_add_file
+  end
+end
+
+post '/experiment/add_file' do  
+  experiment = Experiment.get(params[:id])
+  
+  if experiment.nil?
+    session[:error] = "Cannot find experiment"
+    redirect "/experiments" 
+  end
+  
+  file = Dataset.new
+  file.name = params[:name]
+  file.size = 100 
+  file.created_at = Time.now
+  file.created_by = session[:user_id]
+  file.path = "file"
+  file.mdsum = "ok"
+  file.experiment = Experiment.get(params[:id])
+
+  if file.valid?
+    file.save
+    redirect "/experiment/#{file.experiment.id}" 
+  else
+    session[:error] = "Something went wrong :("
+    redirect "/experiment/#{experiment.id}" 
+  end
+  
+end

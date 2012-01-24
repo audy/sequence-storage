@@ -11,7 +11,7 @@ class Experiment
   property :name,        String
   property :description, Text
   
-  has n, :files
+  has n, :datasets
   has n, :users, :through => Resource
   
   validates_presence_of :name
@@ -70,7 +70,7 @@ end
 
 # The File Model
 # 
-class File
+class Dataset
   include DataMapper::Resource
   include DataMapper::Validate
   
@@ -78,8 +78,9 @@ class File
   property :name, 		String
   property :size, 		Integer
   property :created_at, DateTime
+  property :created_by, Integer
   property :path,   	String
-  property :md5sum,		String
+  property :mdsum,		String
   
   belongs_to :experiment
   
