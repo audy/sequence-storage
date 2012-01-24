@@ -42,7 +42,6 @@ describe 'Experiment Model' do
     experiment.users << user
     experiment.save.should_not be_false
   end
-  
 end
 
 describe 'User Model' do
@@ -87,9 +86,13 @@ describe 'User Model' do
     user.experiments.should_not be_nil
   end
   
+  it 'should update' do 
+    user.update(:name => 'updated name')
+  end
+  
 end
 
-describe 'Dataset'do
+describe 'Dataset' do
 
   let (:experiment) {
     Experiment.create(:name => 'test experiment')
@@ -164,3 +167,51 @@ describe 'Dataset'do
   end
   
 end
+
+describe 'Log Model' do
+  
+  let(:user) {
+    User.create(
+      :email => 'test1@test2.com',
+      :name => 'Testy2 McTesterson2',
+      :password => 'asdf'
+      )
+  }
+  
+  let(:log) { 
+    Log.create(
+      :name => 'Test', 
+      :description => 'sdfsdf', 
+      :user => user
+    ) 
+  }
+
+  it 'can be created' do
+    log.should_not be_nil
+  end
+  
+  it 'can be saved' do
+    user.save.should_not be_false
+  end
+  
+  it 'can be saved' do
+    log.save.should_not be_false
+  end
+
+  it 'has a name' do
+    log.name.inspect
+    log.name.should_not be_nil
+  end
+
+  it 'has a decription' do
+    log.description = 'test log description'
+    log.save
+    log.description.should_not be_nil
+  end
+  
+  it 'can be updated' do
+    log.update(:name => 'updated name')
+    log.name.should == 'updated name'
+  end
+end
+

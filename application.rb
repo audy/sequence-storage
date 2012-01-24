@@ -60,8 +60,15 @@ post '/experiment/new' do
   $stderr.puts @user.errors.inspect
   
   if experiment.save
-    session[:flash] = "Created a new experiment!"
-    redirect "/experiment/#{experiment.id}"
+    
+    log = Log.new
+    log.name = "Experiment Create"
+    log.description = "Experiment " + experiment.id.to_s + " created by " + @user.email.to_s
+    log.user = @user
+    log.save.inspect
+    
+    #session[:flash] = "Created a new experiment!"
+    #redirect "/experiment/#{experiment.id}"
   else
     session[:error] = "Error?!"
     redirect '/experiment/new'
@@ -417,4 +424,10 @@ post '/experiment/add_file' do
     redirect "/experiment/#{experiment.id}" 
   end
   
+end
+
+get '/log' do 
+  Log.get(1).inspect
+  #@log = Log.all
+  #erb :log
 end

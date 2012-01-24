@@ -12,6 +12,7 @@ class Experiment
   property :description, Text
   
   has n, :datasets
+  has n, :logs
   has n, :users, :through => Resource
   
   validates_presence_of :name
@@ -76,18 +77,32 @@ class Dataset
   include DataMapper::Resource
   include DataMapper::Validate
   
-  property :id, 		Serial
-  property :name, 		String
-  property :size, 		Integer
+  property :id, 		    Serial
+  property :name, 		  String
+  property :size, 		  Integer
   property :created_at, DateTime
-  property :path,   	String
-  property :mdsum,		String
+  property :path,   	  String
+  property :mdsum,		  String
   
   belongs_to :user
   belongs_to :experiment
   
 end
+ 
+ 
+# The Log Model
+#  
+class Log
+  include DataMapper::Resource
+  include DataMapper::Validate
   
+  property :id, 		     Serial
+  property :name, 		   String
+  property :created_at,  DateTime
+  property :description, String
+  
+  belongs_to :user
+end
   
   
   
