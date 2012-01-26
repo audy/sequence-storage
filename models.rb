@@ -12,7 +12,6 @@ class Experiment
   property :description, Text
   
   has n, :datasets
-  has n, :logs
   has n, :users, :through => Resource
   
   validates_presence_of :name
@@ -27,7 +26,7 @@ class User
   include BCrypt
   
   attr_accessor :password
-  
+    
   property :created_at, DateTime
   
   property :id,    Serial
@@ -36,7 +35,7 @@ class User
   property :crypted_password, String, :length => 70
   
   has n, :experiments, :through => Resource
-  
+  has n, :logs
   has n, :datasets
   
   validates_uniqueness_of    :email,    :case_sensitive => false
@@ -87,6 +86,7 @@ class Dataset
   belongs_to :user
   belongs_to :experiment
   
+  validates_presence_of :name
 end
  
  
@@ -102,6 +102,8 @@ class Log
   property :description, String
   
   belongs_to :user
+  
+  validates_presence_of :name
 end
   
   

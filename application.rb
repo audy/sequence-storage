@@ -67,8 +67,8 @@ post '/experiment/new' do
     log.user = @user
     log.save.inspect
     
-    #session[:flash] = "Created a new experiment!"
-    #redirect "/experiment/#{experiment.id}"
+    session[:flash] = "Created a new experiment!"
+    redirect "/experiment/#{experiment.id}"
   else
     session[:error] = "Error?!"
     redirect '/experiment/new'
@@ -213,12 +213,13 @@ post '/user/new' do
   user.email = params[:email]
   
   # need validation here
-  if user.valid?
+  begin
+  #if user.valid?
     user.save
     session[:user_id] = user.id
     session[:flash] = "Welcome, #{user.name}!"
     redirect '/'
-  else
+  rescue
     session[:error] = "Something went wrong :("
     redirect '/user/new'
   end
@@ -372,10 +373,11 @@ get '/file/:id/delete' do
       redirect '/experiments'
     end
     experiment_id = @file.experiment.id
-  		
-    if @file.destroy
+  	
+  	begin	
+      @file.destroy
       session[:flash] = 'deleted!'
-      redirect '/experiments'
+      redirect "/experiment/#{experiment_id}"
     else
       session[:error] = 'something went wrong?!'
     end
@@ -392,7 +394,7 @@ get '/experiment/:id/add_file' do
     redirect '/'
   end
   
-  if @experiment.nil?    										#if there is no experiment with that id
+  if @experiment.nil?    									
     session[:error] = "no such experiment \'#{params[:id]}\'"
     redirect '/experiments'
   else
@@ -401,33 +403,32 @@ get '/experiment/:id/add_file' do
 end
 
 post '/experiment/add_file' do  
-  experiment = Experiment.get(params[:id])
+  begin
+    experiment = Experiment.get(params[:id])
   
-  if experiment.nil?
-    session[:error] = "Cannot find experiment"
-    redirect "/experiments" 
-  end
+    if experiment.nil?
+      session[:error] = "Cannot find experiment"
+      redirect "/experiments" 
+    end
   
-  file = Dataset.new
-  file.name = params[:name]
-  file.size = 100 
-  file.path = "file"
-  file.mdsum = "ok"
-  file.experiment = Experiment.get(params[:id])
-  file.user = User.get(session[:user_id])
-  
-  if file.valid?
+    file = Dataset.new
+    file.name = params[:name]
+    file.size = 100 
+    file.path = "file"
+    file.mdsum = "ok"
+    file.experiment = Experiment.get(params[:id])
+    file.user = User.get(session[:user_id])
+
     file.save
-    redirect "/experiment/#{file.experiment.id}" 
-  else
+    redirect "/experiment/#{params[:id]}" 
+  rescue
     session[:error] = "Something went wrong :("
     redirect "/experiment/#{experiment.id}" 
   end
-  
 end
 
 get '/log' do 
-  Log.get(1).inspect
+  #Log.get(1).inspect
   #@log = Log.all
   #erb :log
 end

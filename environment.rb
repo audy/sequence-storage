@@ -25,5 +25,5 @@ $stderr.puts settings.db_url.inspect
 # Setup Database
 DataMapper.finalize
 DataMapper.setup(:default, settings.db_url)
-
+DataMapper::Model.raise_on_save_failure = true 
 enable :sessions
