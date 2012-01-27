@@ -92,13 +92,15 @@ end
 get '/experiment/:id/delete' do
   authenticate!
   
-  @experiment = Experiment.get params[:id]
-  if @experiment.destroy
-    session[:flash] = 'deleted!'
-    redirect '/experiments'
-  else
-    session[:error] = 'something went wrong?!'
-  end
+  session[:error]="delete has been disabled"
+  redirect '/experiments'
+  #@experiment = Experiment.get params[:id]
+  #if @experiment.destroy
+  #  session[:flash] = 'deleted!'
+  #  redirect '/experiments'
+  #else
+  #  session[:error] = 'something went wrong?!'
+  #end
 end
 
 get '/experiment/:id/edit' do
@@ -374,11 +376,13 @@ get '/file/:id/delete' do
     end
     experiment_id = @file.experiment.id
   	
-  	begin	
-      @file.destroy
-      session[:flash] = 'deleted!'
+  	begin
+  	  session[:error] = 'Delete has been disabled'	
+  	  	
+      #@file.destroy
+      #session[:flash] = 'deleted!'
       redirect "/experiment/#{experiment_id}"
-    else
+    rescue
       session[:error] = 'something went wrong?!'
     end
   end

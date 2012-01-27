@@ -17,7 +17,6 @@
   <div class="actions">
     <% if session[:user_id] %>
       <%= link_tag :to => "/file/#{@file.id}/edit", :name => 'Edit File', :class => 'btn' %>
-      <%= link_tag :to => "/file/#{@file.id}/delete", :name => 'Delete', :class => 'btn danger' %> 
    	<% end %>
   </div>
 <% end %>
