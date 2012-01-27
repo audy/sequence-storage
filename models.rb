@@ -35,7 +35,6 @@ class User
   property :crypted_password, String, :length => 70
   
   has n, :experiments, :through => Resource
-  has n, :logs
   has n, :datasets
   
   validates_uniqueness_of    :email,    :case_sensitive => false
@@ -89,22 +88,6 @@ class Dataset
   validates_presence_of :name
 end
  
- 
-# The Log Model
-#  
-class Log
-  include DataMapper::Resource
-  include DataMapper::Validate
-  
-  property :id, 		     Serial
-  property :name, 		   String
-  property :created_at,  DateTime
-  property :description, String
-  
-  belongs_to :user
-  
-  validates_presence_of :name
-end
   
   
   

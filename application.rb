@@ -52,24 +52,17 @@ end
 
 post '/experiment/new' do
   authenticate!
+  begin
+    experiment = Experiment.create(params)
+    experiment.users << @user
   
-  experiment = Experiment.create(params)
-  experiment.users << @user
+    $stderr.puts @user.save
+    $stderr.puts @user.errors.inspect
   
-  $stderr.puts @user.save
-  $stderr.puts @user.errors.inspect
-  
-  if experiment.save
-    
-    log = Log.new
-    log.name = "Experiment Create"
-    log.description = "Experiment " + experiment.id.to_s + " created by " + @user.email.to_s
-    log.user = @user
-    log.save.inspect
-    
+    experiment.save
     session[:flash] = "Created a new experiment!"
     redirect "/experiment/#{experiment.id}"
-  else
+  rescue
     session[:error] = "Error?!"
     redirect '/experiment/new'
   end
@@ -122,13 +115,13 @@ end
 
 post '/experiment/edit' do
   authenticate!
-  
+  begin
   experiment = Experiment.get(params[:id])
   
-  if experiment.update(:name => params[:name], :description => params[:description], :update_at => Time.now)
+    experiment.update(:name => params[:name], :description => params[:description], :update_at => Time.now)
     session[:flash] = "Experiment updated!"
     redirect "/experiment/#{experiment.id}"
-  else
+  rescue
     session[:error] = "Update Error?! Please check fields again"
     redirect '/experiments'
   end
@@ -326,15 +319,14 @@ get '/file/:id' do
 end
 
 post '/file/edit' do
-  
-  file = Dataset.get(params[:file_id])
+  begin 
+    file = Dataset.get(params[:file_id])
  
-  if file.nil?
+    file.update(:name => params[:name]) 
+    redirect "/experiment/#{file.experiment.id}"
+  rescue
     session[:error] = "Update not succesful!"
     redirect '/experiments'
-  else
-    file.update(:name => params[:name]) 
-    redirect "/experiment/#{file.experiment.id}"    
   end
 end
 
@@ -429,10 +421,4 @@ post '/experiment/add_file' do
     session[:error] = "Something went wrong :("
     redirect "/experiment/#{experiment.id}" 
   end
-end
-
-get '/log' do 
-  #Log.get(1).inspect
-  #@log = Log.all
-  #erb :log
 end
