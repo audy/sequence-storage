@@ -56,9 +56,6 @@ post '/experiment/new' do
     experiment = Experiment.create(params)
     experiment.users << @user
   
-    $stderr.puts @user.save
-    $stderr.puts @user.errors.inspect
-  
     experiment.save
     session[:flash] = "Created a new experiment!"
     redirect "/experiment/#{experiment.id}"
@@ -116,9 +113,9 @@ end
 post '/experiment/edit' do
   authenticate!
   begin
-  experiment = Experiment.get(params[:id])
-  
+    experiment = Experiment.get(params[:id])
     experiment.update(:name => params[:name], :description => params[:description], :update_at => Time.now)
+    
     session[:flash] = "Experiment updated!"
     redirect "/experiment/#{experiment.id}"
   rescue
@@ -202,20 +199,19 @@ get '/user/:id' do
 end
 
 post '/user/new' do  
-  user = User.new
-  user.name = params[:name]
-  user.password = params[:password]
-  user.email = params[:email]
-  
-  # need validation here
   begin
-  #if user.valid?
+    user = User.new
+    user.name = params[:name]
+    user.password = params[:password]
+    user.email = params[:email]
     user.save
+    
     session[:user_id] = user.id
     session[:flash] = "Welcome, #{user.name}!"
+    
     redirect '/'
   rescue
-    session[:error] = "Something went wrong :("
+    session[:error] = "Please check if the fields are correct."
     redirect '/user/new'
   end
 end
@@ -228,14 +224,15 @@ get '/session/new' do
 end
 
 post '/session/new' do
-  email, password = params[:email], params[:password]
-  user = User.authenticate(email, password)
-  his = %w[Yo Howdy Hey Hi Hello]
-  if user
+  begin
+    email, password = params[:email], params[:password]
+    user = User.authenticate(email, password)
+    his = %w[Yo Howdy Hey Hi Hello]
+    
     session[:user_id] = user.id
     session[:flash] = "#{his.sample}, #{user.name}!"
     redirect '/'
-  else
+  rescue
     session[:error] = "Invalid"
     redirect '/session/new'
   end
@@ -319,6 +316,7 @@ get '/file/:id' do
 end
 
 post '/file/edit' do
+  authenticate!
   begin 
     file = Dataset.get(params[:file_id])
  
@@ -343,14 +341,9 @@ get '/file/:id/edit' do
   if @file.nil?    										#if there is no file with that id
     session[:error] = "no such file \'#{params[:id]}\'"
     redirect '/experiments'
-  else
-    if @file.experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
-      session[:error] = "You cannot edit this file because you are not a owner"
-      redirect '/experiments'
-    else
-      erb :file_edit
-    end
   end
+  
+  erb :file_edit
 end
 
 get '/file/:id/delete' do
@@ -360,23 +353,22 @@ get '/file/:id/delete' do
   if @file.nil?
     session[:error] = 'Dataset file not found!'
     redirect '/experiments'
-  else  
+  end 
   
-    if @file.experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
-      session[:error] = "You cannot delete this file because you are not a owner"
-      redirect '/experiments'
-    end
+  if @file.experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
+     session[:error] = "You cannot delete this file because you are not a owner"
+     redirect '/experiments'
+  end
+
+  begin
     experiment_id = @file.experiment.id
-  	
-  	begin
-  	  session[:error] = 'Delete has been disabled'	
+  	session[:error] = 'Delete has been disabled'	
   	  	
-      #@file.destroy
-      #session[:flash] = 'deleted!'
-      redirect "/experiment/#{experiment_id}"
-    rescue
-      session[:error] = 'something went wrong?!'
-    end
+    #@file.destroy
+    #session[:flash] = 'deleted!'
+    redirect "/experiment/#{experiment_id}"
+  rescue
+    session[:error] = 'something went wrong?!'
   end
 end
 
@@ -399,6 +391,7 @@ get '/experiment/:id/add_file' do
 end
 
 post '/experiment/add_file' do  
+  authenticate!
   begin
     experiment = Experiment.get(params[:id])
   
