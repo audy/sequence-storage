@@ -9,11 +9,11 @@ end
 
 desc "run rspec"
 task :spec do
-  sh "rspec -c"
+  sh "rspec"
 end
 
 namespace :db do
-  
+
   desc "seed the database with informatione"
   task :seed do
     load 'environment.rb'
@@ -24,15 +24,15 @@ namespace :db do
       e.save
     end
   end
-  
+
   desc "create the database"
   task :create do
     load 'environment.rb'
     config = DataMapper.repository.adapter.options.symbolize_keys
     DataMapper.setup(DataMapper.repository.name, config)
-    
+
   end
-  
+
   desc "auto migrate the database"
   task :automigrate do
     load 'environment.rb'
