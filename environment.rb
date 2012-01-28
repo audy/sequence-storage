@@ -24,4 +24,8 @@ configure :test do
   DataMapper.auto_migrate!
 end
 
+configure :production do
+  DataMapper.setup(default, ENV['DB_URL'])
+end
+
 enable :sessions
