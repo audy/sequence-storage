@@ -336,9 +336,7 @@ get '/file/:id/edit' do
   if @file.experiment.users.first(:id => session[:user_id]).nil?
     session[:error] = "You are not a owner, you can not modify"
     redirect '/'
-  end
-   
-  if @file.nil?    										#if there is no file with that id
+  elsif @file.nil?
     session[:error] = "no such file \'#{params[:id]}\'"
     redirect '/experiments'
   end
@@ -350,20 +348,21 @@ get '/file/:id/delete' do
   authenticate!
   
   @file = Dataset.get params[:id]
+  
   if @file.nil?
     session[:error] = 'Dataset file not found!'
     redirect '/experiments'
   end 
   
-  if @file.experiment.users.first(:id => @user.id).nil?			# if the user is not the owner
+  if @file.experiment.users.first(:id => @user.id).nil?
      session[:error] = "You cannot delete this file because you are not a owner"
      redirect '/experiments'
   end
 
   begin
     experiment_id = @file.experiment.id
-  	session[:error] = 'Delete has been disabled'	
-  	  	
+    session[:error] = 'Delete has been disabled'  
+
     #@file.destroy
     #session[:flash] = 'deleted!'
     redirect "/experiment/#{experiment_id}"
@@ -382,7 +381,7 @@ get '/experiment/:id/add_file' do
     redirect '/'
   end
   
-  if @experiment.nil?    									
+  if @experiment.nil?
     session[:error] = "no such experiment \'#{params[:id]}\'"
     redirect '/experiments'
   else
