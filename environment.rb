@@ -6,24 +6,22 @@ require 'dm-validations'
 require 'dm-timestamps'
 require 'bcrypt'
 
-# Local stuff
+# Load and finalize models
 require './models.rb'
+DataMapper.finalize
 
-set :environment, :development
-set :root, File.expand_path(File.dirname(__FILE__))
-
-case settings.environment
-  when :production
-    set :db_url, ENV['DATABASE_URL']
-  when :development
-    set :db_url, "sqlite3://#{settings.root}/db/development.db"
-    require 'sinatra/reloader'
+configure :development do
+  require 'sinatra/reloader'
+  DataMapper.setup(:default,
+                   :adapter => 'sqlite',
+                   :database => File.join('db', 'development.db'))
+  DataMapper::Model.raise_on_save_failure = true 
+  DataMapper.auto_upgrade!
 end
 
-$stderr.puts settings.db_url.inspect
+configure :test do
+  DataMapper.setup(default, "sqlite::memory:")
+  DataMapper.auto_migrate!
+end
 
-# Setup Database
-DataMapper.finalize
-DataMapper.setup(:default, settings.db_url)
-DataMapper::Model.raise_on_save_failure = true 
 enable :sessions
