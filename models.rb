@@ -75,21 +75,15 @@ class Dataset
   include DataMapper::Resource
   include DataMapper::Validate
   
-  property :id, 		    Serial
-  property :name, 		  String
-  property :size, 		  Integer
+  property :id,         Serial
+  property :name,       String
+  property :size,       Integer
   property :created_at, DateTime
-  property :path,   	  String
-  property :mdsum,		  String
+  property :path,       String
+  property :mdsum,      String
   
   belongs_to :user
   belongs_to :experiment
   
   validates_presence_of :name
 end
- 
-  
-  
-  
-  
-  
