@@ -278,13 +278,6 @@ post '/upload' do
   "Upload complete"
 end
 
-get '/download/file/:filename' do |filename|
-  authenticate!
-  
-  @file = Dataset.get(filename)
-  send_file "./files/#{@file.experiment.name}/#{@file.name}", :filename => @file.name, :type => 'Application/octet-stream'
-end
-
 get '/download/experiment/:ex' do |ex|
   authenticate!
   
@@ -303,11 +296,33 @@ get '/download/experiment/:ex' do |ex|
       "File skipped"
     end
   end
-  halt 321, session[:error] = "no experiment #{experiment.name}", redirect("/experiments")
+  # halt 321, session[:error] = "no experiment #{experiment.name}", redirect("/experiments")
 end
 
 ##
 # Files
+#
+
+get '/file/:id/download' do
+  authenticate!
+  
+  @file = Dataset.get(params[:id])
+  
+  if @file.nil?
+    session[:error] = "File not found"
+    redirect "/experiments"
+  end
+  
+  file_path = "#{FILES_ROUTE}/#{@file.path}"
+  
+  if File.exist?(file_path)
+    send_file file_path, :filename => @file.name, :type => 'Application/octet-stream'
+  else
+    session[:error] = "File not where we think it is"
+    redirect "/experiments"
+  end
+end
+
 get '/file/:id' do
   authenticate!
   
@@ -402,12 +417,12 @@ post '/experiment/add_file' do
   
     if experiment.nil?
       session[:error] = "Cannot find experiment"
-      redirect "/experiments" 
+      redirect "/experiments"
     end
   
     file = Dataset.new
     file.name = params[:name]
-    file.size = 100 
+    file.size = 100
     file.path = "/files/"
     file.mdsum = "ok"
     file.experiment = Experiment.get(params[:id])
