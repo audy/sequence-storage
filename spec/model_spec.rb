@@ -114,7 +114,6 @@ describe 'Dataset' do
 
   let(:dataset) {
     Dataset.create(
-      :name => 'TestUser',
       :size => 1000,
       :path => '/dir1/dir2/',
       :mdsum => 'okok',
@@ -168,8 +167,8 @@ describe 'Dataset' do
   end
   
   it 'can be updated' do
-    dataset.update(:name => '1111')
-    dataset.name.should == '1111'
+    dataset.update(:path => '1111')
+    dataset.path.should == '1111'
   end
   
 end
