@@ -8,9 +8,11 @@ require 'bcrypt'
 
 # Load and finalize models
 require './models.rb'
+
 DataMapper.finalize
 
 configure :development do
+  FILES_ROUTE = "."
   require 'sinatra/reloader'
   DataMapper.setup(:default,
                    :adapter => 'sqlite',
@@ -20,11 +22,13 @@ configure :development do
 end
 
 configure :test do
+  FILES_ROUTE = "."
   DataMapper.setup(default, "sqlite::memory:")
   DataMapper.auto_migrate!
 end
 
 configure :production do
+  FILES_ROUTE = "http://theactualserver.com"
   DataMapper.setup(default, ENV['DB_URL'])
 end
 
