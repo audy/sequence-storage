@@ -76,14 +76,17 @@ class Dataset
   include DataMapper::Validate
   
   property :id,         Serial
-  property :name,       String
   property :size,       Integer
   property :created_at, DateTime
-  property :path,       String
+  property :path,       String # /path/to/thefile.ext
   property :mdsum,      String
   
   belongs_to :user
   belongs_to :experiment
   
   validates_presence_of :name
+  
+  def name
+    File.basename(self.path)
+  end
 end
