@@ -53,7 +53,8 @@
       <% if session[:user_id] %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn primary' %>
-        <%= link_tag :to => "/experiment/#{@experiment.id}/add_file", :name => 'Add File', :class => 'btn primary' %> 
+        <%= link_tag :to => "/experiment/#{@experiment.id}/add_file", :name => 'Add File', :class => 'btn primary' %>
+        <%= link_tag :to => "/download/experiment/#{@experiment.id}", :name => 'Download Experiment', :class => 'btn primary' %>
  	  <% end %>
   </div>
   <% end %>

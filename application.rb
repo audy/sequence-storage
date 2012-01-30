@@ -278,27 +278,33 @@ post '/upload' do
   "Upload complete"
 end
 
-get '/download' do
-  if session[:user_id]
-    erb :download
-  else
-    session[:error] = "Please log in"
-    redirect '/'
-  end
+get '/download/file/:filename' do |filename|
+  authenticate!
+  
+  @file = Dataset.get(filename)
+  send_file "./files/#{@file.experiment.name}/#{@file.name}", :filename => @file.name, :type => 'Application/octet-stream'
 end
 
-# 'currently you can only download from files folder'
-# 'But does not restrict browsing files for download'
-post '/download' do
-  filename=params[:filename]
-  if File.exists?("./files/"+filename)
-    send_file "./files/#{filename}", :filename => filename, :type => 'Application/octet-stream'
-  else
-    session[:error] = "File does not exist in files folder"
-    redirect '/'
+get '/download/experiment/:ex' do |ex|
+  authenticate!
+  
+  experiment = Experiment.get(ex)
+  files = experiment.datasets
+  
+  if (files.length == 0)
+    session[:error] = "no files in experiment #{experiment.name}"
+    redirect "/experiment/#{experiment.id}"
   end
+  
+  files.each do |file|
+    if File.exist?("./files/#{experiment.name}/#{file.name}")
+      send_file "./files/#{experiment.name}/#{file.name}", :filename => file.name, :type => 'Application/octet-stream'
+    else
+      "File skipped"
+    end
+  end
+  halt 321, session[:error] = "no experiment #{experiment.name}", redirect("/experiments")
 end
-
 
 ##
 # Files
@@ -306,7 +312,7 @@ get '/file/:id' do
   authenticate!
   
   @file = Dataset.get(params[:id])
-  
+    
   if @file.nil?
     session[:error] = "no such file \'#{params[:id]}\'"
     redirect '/experiments'
@@ -402,7 +408,7 @@ post '/experiment/add_file' do
     file = Dataset.new
     file.name = params[:name]
     file.size = 100 
-    file.path = "file"
+    file.path = "/files/"
     file.mdsum = "ok"
     file.experiment = Experiment.get(params[:id])
     file.user = User.get(session[:user_id])
