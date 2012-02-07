@@ -5,6 +5,8 @@ require 'dm-migrations'
 require 'dm-validations'
 require 'dm-timestamps'
 require 'bcrypt'
+require 'json'
+require 'securerandom'
 
 # Load and finalize models
 require './models.rb'

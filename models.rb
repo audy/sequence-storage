@@ -11,11 +11,12 @@ class Experiment
   property :name,        String
   property :description, Text
   
+  has n, :sharelinks
+  
   has n, :datasets
   has n, :users, :through => Resource
   
   validates_presence_of :name
-  
 end
 
 # The User Model
@@ -81,12 +82,39 @@ class Dataset
   property :path,       String # /path/to/thefile.ext
   property :mdsum,      String
   
+  has n, :sharelinks
+  
   belongs_to :user
   belongs_to :experiment
   
-  validates_presence_of :name
-  
   def name
     File.basename(self.path)
+  end
+end
+
+
+# Sharelink Model
+#
+
+class Sharelink
+  include DataMapper::Resource
+  include DataMapper::Validate
+
+  property :id,         Serial
+  property :value,      String, :length => 54, :default => Proc.new { SecureRandom.urlsafe_base64(40) }
+  property :created_at, DateTime
+  property :expire_at,  DateTime
+  
+  belongs_to :dataset, :required => false
+  belongs_to :experiment, :required => false
+  
+  validates_with_method :check_for_dataset_or_experiment
+
+  def check_for_dataset_or_experiment
+    if (self.dataset || self.experiment) && !(self.dataset && self.experiment)
+      return true
+    else
+      return [ false, "Must have either a Dataset or an Experiment."]
+    end
   end
 end

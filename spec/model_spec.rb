@@ -101,7 +101,9 @@ end
 describe 'Dataset' do
 
   let (:experiment) {
-    Experiment.create(:name => 'test experiment')
+    Experiment.create(
+      :name => 'test experiment',
+    )
   }
   
   let(:user) {
@@ -171,4 +173,60 @@ describe 'Dataset' do
     dataset.path.should == '1111'
   end
   
+end
+
+describe 'Sharelink Model' do
+  
+  let(:sharelink) { Sharelink.new }
+  
+  let (:experiment) { Experiment.new(:name => 'test') }
+  
+  let (:dataset) { Dataset.new(
+    :size => 1000,
+    :path => '/dir1/dir2/',
+    :mdsum => 'okok',
+    :user => user,
+    :experiment => experiment,
+  )}
+  
+  let(:user) {
+    User.new(
+      :email => 'test@test.com',
+      :name => 'Testy McTesterson'
+    )
+  }
+  
+  it 'can be created' do
+    sharelink.should_not be_nil
+  end
+  
+  it 'has a value' do
+    sharelink.value.should_not be_nil
+  end
+  
+  it 'is given a random value' do
+    Sharelink.new.value.should_not == Sharelink.new.value
+  end
+  
+  it 'can belong to an experiment' do
+    sharelink.experiment = experiment
+    sharelink.save
+    experiment.sharelinks.first.id.should == sharelink.id
+  end
+  
+  it 'can belong to a dataset' do
+    sharelink.dataset = dataset
+    sharelink.save
+    dataset.sharelinks.first.id.should == sharelink.id
+  end
+  
+  it 'cannot be given both a Dataset and an Experiment' do
+    sharelink.dataset = dataset
+    sharelink.experiment = experiment
+    Proc.new { sharelink.save }.should raise_error DataMapper::SaveFailureError
+  end
+  
+  it 'must have either a Dataset or an Experiment' do
+    Proc.new { sharelink.save}.should raise_error DataMapper::SaveFailureError
+  end
 end
