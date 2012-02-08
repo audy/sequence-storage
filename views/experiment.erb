@@ -2,6 +2,43 @@
   <div class="page-header">
     <h1><%= @experiment.name %></h1>
   </div>
+  <%if @user.nil? %>
+    <script type = "text/javascript">
+      $(document).ready(function(){
+        $("#sharelink").remove();
+      });
+    </script>
+  <% end %>  
+  <div class="share_button">
+    <script type="text/javascript">
+    getSharelink = function() {
+      $.getJSON("/getrandomstring/experiment/<%= @experiment.id %>", function(result) {
+      if (result.status == 'okay' && result.value ) {
+        content = result.value
+      } else {
+        content = "something went wrong :("
+      }
+      $("#random_string_box").append("localhost:9292/path/"+content);
+      $("#sharelink").remove();
+      });
+    };
+    
+    getSharefile = function(fileid){
+      $.getJSON("/getrandomstring/dataset/"+fileid, function(result){
+        if (result.status == 'okay' && result.value ) {
+          content = result.value
+        } else {
+          content = "something went wrong :("
+        }
+        $("#sharelabel"+fileid).append("localhost:9292/path/"+content); 
+        $("#sharefile"+fileid).remove();
+      });
+    };
+    </script>
+    <a href="#" onClick="getSharelink();" id="sharelink">Share</a>
+    <p id="random_string_box"></p>
+  </div>
+
   <p>Created: <%= pretty_time @experiment.created_at %></p>
   <% update_time = @experiment.update_at %>
   <% if !update_time.nil? %>
@@ -42,23 +79,31 @@
         <h2>Files</h2>
         <ul class="undecorated">
           <% @experiment.datasets.each do |file| %>
-            <li><a href="/file/<%= file.id %>"><%= file.name %> - <%= file.created_at%> - <%= file.user.name %></a></li>
+            <li>
+              <a href="/file/<%= file.id %>"><%= file.name %> - <%= file.created_at%> - <%= file.user.name %></a>
+              <% if @user %>
+                - <a href="#" onClick="getSharefile(<%= file.id %>);" id="sharefile<%= file.id %>">Share File</a>
+              <% end %>
+              <a id="sharelabel<%= file.id%>"></a>
+            </li>
           <% end %>
         </ul>
       <% end %>
     </div>
   </div>
-  <% if !@experiment.users.first(:id => @user.id).nil? %>
-    <div class="actions">
-      <% if session[:user_id] %>
+
+  <div class="actions">
+    <div id="user_buttons">
+      <% if session[:user_id] && !@experiment.users.first(:id => @user.id).nil? %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn primary' %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/add_file", :name => 'Add File', :class => 'btn primary' %>
         <%= link_tag :to => "/download/experiment/#{@experiment.id}", :name => 'Download Experiment', :class => 'btn primary' %>
- 	  <% end %>
+ 	    <% elsif session[:temp_user] %>
+ 	      <%= link_tag :to => "/download/experiment/#{@experiment.id}", :name => 'Download Experiment', :class => 'btn primary' %>
+      <% end %>
+    </div>
   </div>
-  <% end %>
-
 <% else %>
   <p>no such experiment <%= params[:id] %></p>
 <% end %>

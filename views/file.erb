@@ -13,11 +13,11 @@
 <% end %>
 <p>File size: <%= @file.size %></p>
 
-<% if !@file.experiment.users.first(:id => @user.id).nil? %>
   <div class="actions">
-    <% if session[:user_id] %>
+    <% if session[:user_id] && @file.experiment.users.first(:id => @user.id)%>
       <%= link_tag :to => "/file/#{@file.id}/edit", :name => 'Edit File', :class => 'btn' %>
-      <%= link_tag :to => "/file/#{@file.id}/download", :name => 'download'%>
+      <%= link_tag :to => "/file/#{@file.id}/download", :name => 'download', :class => 'btn'%>
+    <% elsif session[:temp_user] %> 
+      <%= link_tag :to => "/file/#{@file.id}/download", :name => 'download', :class => 'btn'%>
    	<% end %>
   </div>
-<% end %>

@@ -19,7 +19,10 @@ helpers do
   end
 
   def authenticate!
-    redirect '/' unless @user
+
+    if !@user 
+     redirect '/'
+    end
   end
 end
 
@@ -324,7 +327,14 @@ get '/file/:id/download' do
 end
 
 get '/file/:id' do
-  authenticate!
+  #authenticate!
+  if session[:user_id]
+       "ok"
+  elsif session[:temp_user]
+    temp_user = session[:temp_user]
+  else
+     redirect '/'
+  end
   
   @file = Dataset.get(params[:id])
     
@@ -421,9 +431,8 @@ post '/experiment/add_file' do
     end
   
     file = Dataset.new
-    file.name = params[:name]
     file.size = 100
-    file.path = "/files/"
+    file.path = "/files/"+params[:name]
     file.mdsum = "ok"
     file.experiment = Experiment.get(params[:id])
     file.user = User.get(session[:user_id])
@@ -435,3 +444,63 @@ post '/experiment/add_file' do
     redirect "/experiment/#{experiment.id}" 
   end
 end
+
+#######
+# Generate string
+#
+
+# THIS IS A JSON-ONLY ROUTE
+get '/getrandomstring/:object/:id' do
+  authenticate!
+  
+  # Get type of object sharelink is needed for, and its id
+  object = params[:object]
+  id = params[:id]
+  
+  # Attempt to find object in Database
+  ob =
+    case object
+    when 'experiment'
+      Experiment.get id
+    when 'dataset'
+      Dataset.get id
+    else
+      return { status: 'error' }.to_json
+    end
+  
+  # Complain if object doesn't exist
+  # ob.id rescue return { status: 'error' }.to_json
+  
+  # Create a new sharelink
+  s = Sharelink.new(object.to_sym => ob)
+
+  if s.valid? # Return JSON with response if valid
+    s.save
+    { 
+      :value => s.value,
+      :status => 'okay',
+    }.to_json
+  else # Otherwise, Crap
+    return { status: 'error' }.to_json
+  end
+end
+
+get '/path/:long_string' do
+  @sharelink = Sharelink.first(:value => params[:long_string])
+  
+  if @sharelink.nil?
+    session[:error] = "No such Experiment"
+    redirect "/"
+  end
+  if @sharelink.experiment
+    @experiment = @sharelink.experiment
+    session[:temp_user] = @experiment.id
+    erb :experiment
+  elsif @sharelink.dataset
+    @file = @sharelink.dataset
+    session[:temp_user]= @file.id
+    erb :file 
+  else
+    "eoore"
+  end
+end 
