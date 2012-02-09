@@ -501,6 +501,6 @@ get '/path/:long_string' do
     session[:temp_user]= @file.id
     erb :file 
   else
-    "eoore"
+    redirect "/"
   end
 end 
