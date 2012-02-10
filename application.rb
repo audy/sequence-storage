@@ -328,15 +328,15 @@ end
 
 get '/file/:id' do
   #authenticate!
+  @file = Dataset.get(params[:id])
+  
   if session[:user_id]
        "ok"
-  elsif session[:temp_user]
+  elsif (session[:temp_user_type] == "dataset" && session["temp_user"] == params[:id])||(session[:temp_user_type] == "experiment" && session[:temp_user] == @file.experiment.id)
     temp_user = session[:temp_user]
   else
      redirect '/'
   end
-  
-  @file = Dataset.get(params[:id])
     
   if @file.nil?
     session[:error] = "no such file \'#{params[:id]}\'"
@@ -494,10 +494,12 @@ get '/path/:long_string' do
   end
   if @sharelink.experiment
     @experiment = @sharelink.experiment
+    session[:temp_user_type] = "experiment"
     session[:temp_user] = @experiment.id
     erb :experiment
   elsif @sharelink.dataset
     @file = @sharelink.dataset
+    session[:temp_user_type] = "dataset"
     session[:temp_user]= @file.id
     erb :file 
   else
