@@ -473,7 +473,7 @@ get '/getrandomstring/:object/:id' do
   
   # Create a new sharelink
   s = Sharelink.new(object.to_sym => ob)
-  s.expire_at = Time.now + (2*7*24*60*60)      # to get 2 weeks = 2 * days*hours*minutes*seconds
+    s.expire_at = Time.now + 30#(2*7*24*60*60)      # to get 2 weeks = 2 * days*hours*minutes*seconds
   if s.valid?                                  # Return JSON with response if valid
     s.save
     { 
@@ -492,6 +492,11 @@ get '/path/:long_string' do
   if @sharelink.nil?
     session[:error] = "No such Experiment"
     redirect "/"
+  end
+  if @sharelink.expire_at < DateTime.now
+    @sharelink.destroy
+      session[:error] = 'The link has expired'
+    redirect '/'
   end
   if @sharelink.experiment
     @experiment = @sharelink.experiment
