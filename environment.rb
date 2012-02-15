@@ -18,7 +18,7 @@ configure :development do
   require 'sinatra/reloader'
   DataMapper.setup(:default,
                    :adapter => 'sqlite',
-                   :database => File.join('db', 'development.db'))
+                   :database => ENV['DB_URL'] || File.join('db', 'development.db'))
   DataMapper::Model.raise_on_save_failure = true 
   DataMapper.auto_upgrade!
 end
@@ -31,7 +31,7 @@ end
 
 configure :production do
   FILES_ROUTE = "http://theactualserver.com"
-  DataMapper.setup(default, ENV['DB_URL'])
+  DataMapper.setup(default, :adapter => 'sqlite', :database => ENV['DB_URL'])
 end
 
 enable :sessions
