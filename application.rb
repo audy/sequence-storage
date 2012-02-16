@@ -19,7 +19,6 @@ helpers do
   end
 
   def authenticate!
-
     if !@user 
      redirect '/'
     end
@@ -262,15 +261,15 @@ end
 
 get '/file/:id' do
   #authenticate!
+  @file = Dataset.get(params[:id])
+  
   if session[:user_id]
        "ok"
-  elsif session[:temp_user]
+  elsif (session[:temp_user_type] == "dataset" && session[:temp_user] == params[:id])||(session[:temp_user_type] == "experiment" && session[:temp_user] == @file.experiment.id)
     temp_user = session[:temp_user]
   else
      redirect '/'
   end
-  
-  @file = Dataset.get(params[:id])
     
   if @file.nil?
     session[:error] = "no such file \'#{params[:id]}\'"
@@ -418,12 +417,13 @@ get '/getrandomstring/:object/:id' do
   
   # Create a new sharelink
   s = Sharelink.new(object.to_sym => ob)
-
-  if s.valid? # Return JSON with response if valid
+    s.expire_at = Time.now + (2*7*24*60*60)      # To get 2 weeks = 2 * days*hours*minutes*seconds
+  if s.valid?                                  # Return JSON with response if valid
     s.save
     { 
       :value => s.value,
       :status => 'okay',
+      :expire_at => s.expire_at
     }.to_json
   else # Otherwise, Crap
     return { status: 'error' }.to_json
@@ -437,15 +437,23 @@ get '/path/:long_string' do
     session[:error] = "No such Experiment"
     redirect "/"
   end
+  if @sharelink.expire_at < DateTime.now
+    @sharelink.destroy
+    session.clear
+    session[:error] = 'The link has expired'
+    redirect '/'
+  end
   if @sharelink.experiment
     @experiment = @sharelink.experiment
+    session[:temp_user_type] = "experiment"
     session[:temp_user] = @experiment.id
     erb :experiment
   elsif @sharelink.dataset
     @file = @sharelink.dataset
+    session[:temp_user_type] = "dataset"
     session[:temp_user]= @file.id
     erb :file 
   else
-    "eoore"
+    redirect "/"
   end
 end 
