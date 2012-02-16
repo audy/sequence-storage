@@ -14,7 +14,7 @@ require './models.rb'
 DataMapper.finalize
 
 configure :development do
-  FILES_ROUTE = "."
+  FILES_ROUTE = "files"
   require 'sinatra/reloader'
   DataMapper.setup(:default,
                    :adapter => 'sqlite',
@@ -31,7 +31,7 @@ configure :test do
 end
 
 configure :production do
-  FILES_ROUTE = "http://theactualserver.com"
+  FILES_ROUTE = "/var/dataman/"
   DataMapper.setup(default, ENV['DB_URL'])
 end
 

@@ -379,8 +379,19 @@ post '/experiment/add_file' do
   end
 end
 
-#######
-# Generate string
+#
+# File downloading
+#
+
+get '/f/:id' do
+  authenticate!
+  dataset = Dataset.get params[:id]
+  full_path = File.join(FILES_ROUTE, dataset.path)
+  send_file full_path, :filename => dataset.name, :type => 'Application/octet-stream'
+end
+
+#
+# Temporary Share Links
 #
 
 # THIS IS A JSON-ONLY ROUTE
