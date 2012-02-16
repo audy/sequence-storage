@@ -19,13 +19,14 @@ configure :development do
   DataMapper.setup(:default,
                    :adapter => 'sqlite',
                    :database => File.join('db', 'development.db'))
-  DataMapper::Model.raise_on_save_failure = true 
+  DataMapper::Model.raise_on_save_failure = true
   DataMapper.auto_upgrade!
 end
 
 configure :test do
   FILES_ROUTE = "."
   DataMapper.setup(default, "sqlite::memory:")
+  DataMapper::Model.raise_on_save_failure = true
   DataMapper.auto_migrate!
 end
 
