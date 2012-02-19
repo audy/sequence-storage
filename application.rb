@@ -86,13 +86,6 @@ get '/experiment/:id/delete' do
   
   session[:error]="delete has been disabled"
   redirect '/experiments'
-  #@experiment = Experiment.get params[:id]
-  #if @experiment.destroy
-  #  session[:flash] = 'deleted!'
-  #  redirect '/experiments'
-  #else
-  #  session[:error] = 'something went wrong?!'
-  #end
 end
 
 get '/experiment/:id/edit' do
@@ -116,7 +109,9 @@ post '/experiment/edit' do
   authenticate!
   begin
     experiment = Experiment.get(params[:id])
-    experiment.update(:name => params[:name], :description => params[:description], :update_at => Time.now)
+    experiment.update(:name => params[:name], 
+                      :description => params[:description], 
+                      :update_at => Time.now)
     
     session[:flash] = "Experiment updated!"
     redirect "/experiment/#{experiment.id}"
@@ -252,6 +247,7 @@ end
 #
 get '/search/?' do
   authenticate!
+  
   $stderr.puts params
   query = "%#{params[:q]}%"
   @results = Set.new
@@ -259,17 +255,14 @@ get '/search/?' do
   erb :search
 end
 
+##
+# Files
+#
+
 get '/file/:id' do
-  #authenticate!
-  @file = Dataset.get(params[:id])
+  authenticate!
   
-  if session[:user_id]
-       "ok"
-  elsif (session[:temp_user_type] == "dataset" && session[:temp_user] == params[:id])||(session[:temp_user_type] == "experiment" && session[:temp_user] == @file.experiment.id)
-    temp_user = session[:temp_user]
-  else
-     redirect '/'
-  end
+  @file = Dataset.get(params[:id])
     
   if @file.nil?
     session[:error] = "no such file \'#{params[:id]}\'"
@@ -382,78 +375,93 @@ end
 # File downloading
 #
 
-get '/f/:id' do
+get '/file/:id/download' do
   authenticate!
-  dataset = Dataset.get params[:id]
-  full_path = File.join(FILES_ROUTE, dataset.path)
-  send_file full_path, :filename => dataset.name, :type => 'Application/octet-stream'
+ 
+  s3_connect
+  filename = Dataset.get(params[:id]).name
+
+  key = AWS::S3::S3Object.url_for(filename,'seqstore-test-bucket', :use_ssl =>true)
+  
+  redirect key
+end
+
+##
+# Connection S3
+#
+
+def s3_connect
+  AWS::S3::Base.establish_connection!(
+    :access_key_id     => 'DIDUREALLYTRYTHIS',
+    :secret_access_key => 'SUPERCALIFRAGILISTICEXPIALIDOCIOUS'
+  )
 end
 
 #
 # Temporary Share Links
 #
 
-# THIS IS A JSON-ONLY ROUTE
-get '/getrandomstring/:object/:id' do
-  authenticate!
+## THIS IS A JSON-ONLY ROUTE
+#get '/getrandomstring/:object/:id' do
+#  authenticate!
+#  
+#  # Get type of object sharelink is needed for, and its id
+#  object = params[:object]
+#  id = params[:id]
+#  
+#  # Attempt to find object in Database
+#  ob =
+#    case object
+#    when 'experiment'
+#      Experiment.get id
+#    when 'dataset'
+#      Dataset.get id
+#    else
+#      return { status: 'error' }.to_json
+#    end
   
-  # Get type of object sharelink is needed for, and its id
-  object = params[:object]
-  id = params[:id]
-  
-  # Attempt to find object in Database
-  ob =
-    case object
-    when 'experiment'
-      Experiment.get id
-    when 'dataset'
-      Dataset.get id
-    else
-      return { status: 'error' }.to_json
-    end
-  
-  # Complain if object doesn't exist
-  # ob.id rescue return { status: 'error' }.to_json
-  
-  # Create a new sharelink
-  s = Sharelink.new(object.to_sym => ob)
-    s.expire_at = Time.now + (2*7*24*60*60)      # To get 2 weeks = 2 * days*hours*minutes*seconds
-  if s.valid?                                  # Return JSON with response if valid
-    s.save
-    { 
-      :value => s.value,
-      :status => 'okay',
-      :expire_at => s.expire_at
-    }.to_json
-  else # Otherwise, Crap
-    return { status: 'error' }.to_json
-  end
-end
+#  # Complain if object doesn't exist
+#  # ob.id rescue return { status: 'error' }.to_json
+#  
+#  # Create a new sharelink
+#  s = Sharelink.new(object.to_sym => ob)
+#    s.expire_at = Time.now + (2*7*24*60*60)      # To get 2 weeks = 2 * #days*hours*minutes*seconds
+#  if s.valid?                                  # Return JSON with response if valid
+#    s.save
+#    { 
+#      :value => s.value,
+#      :status => 'okay',
+#      :expire_at => s.expire_at
+#    }.to_json
+#  else # Otherwise, Crap
+#    return { status: 'error' }.to_json
+#  end
+#end
 
-get '/path/:long_string' do
-  @sharelink = Sharelink.first(:value => params[:long_string])
-  
-  if @sharelink.nil?
-    session[:error] = "No such Experiment"
-    redirect "/"
-  end
-  if @sharelink.expire_at < DateTime.now
-    @sharelink.destroy
-    session.clear
-    session[:error] = 'The link has expired'
-    redirect '/'
-  end
-  if @sharelink.experiment
-    @experiment = @sharelink.experiment
-    session[:temp_user_type] = "experiment"
-    session[:temp_user] = @experiment.id
-    erb :experiment
-  elsif @sharelink.dataset
-    @file = @sharelink.dataset
-    session[:temp_user_type] = "dataset"
-    session[:temp_user]= @file.id
-    erb :file 
-  else
-    redirect "/"
-  end
-end 
+#get '/path/:long_string' do
+#  @sharelink = Sharelink.first(:value => params[:long_string])
+#  
+#  if @sharelink.nil?
+#    session[:error] = "No such Experiment"
+#    redirect "/"
+#  end
+#  if @sharelink.expire_at < DateTime.now
+#    @sharelink.destroy
+#    session.clear
+#    session[:error] = 'The link has expired'
+#    redirect '/'
+#  end
+#  if @sharelink.experiment
+#    @experiment = @sharelink.experiment
+#    session[:temp_user_type] = "experiment"
+#    session[:temp_user] = @experiment.id
+#    erb :experiment
+#  elsif @sharelink.dataset
+#    @file = @sharelink.dataset
+#    session[:temp_user_type] = "dataset"
+#    session[:temp_user]= @file.id
+#    erb :file 
+#  else
+#    redirect "/"
+#  end
+#end 

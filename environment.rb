@@ -7,6 +7,7 @@ require 'dm-timestamps'
 require 'bcrypt'
 require 'json'
 require 'securerandom'
+require 'aws/s3'
 
 # Load and finalize models
 require './models.rb'
@@ -14,7 +15,7 @@ require './models.rb'
 DataMapper.finalize
 
 configure :development do
-  FILES_ROUTE = "files"
+  FILES_ROUTE = "files/"
   require 'sinatra/reloader'
   DataMapper.setup(:default,
                    :adapter => 'sqlite',
@@ -25,15 +26,14 @@ end
 
 configure :test do
   FILES_ROUTE = "."
-  DataMapper.setup(default, "sqlite::memory:")
+  DataMapper.setup(:default, "sqlite::memory:")
   DataMapper::Model.raise_on_save_failure = true
   DataMapper.auto_migrate!
 end
 
 configure :production do
-  FILES_ROUTE = "/var/dataman/"
-  DataMapper.setup(default, ENV['DB_URL'])
-  DataMapper.setup(default, :adapter => 'sqlite', :database => ENV['DB_URL'])
+  FILES_ROUTE = "./files/"
+  DataMapper.setup(:default, :adapter => 'sqlite', :database => ENV['DB_URL'])
 end
 
 enable :sessions

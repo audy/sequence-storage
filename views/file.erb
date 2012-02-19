@@ -14,10 +14,8 @@
 <p>File size: <%= @file.size %></p>
 
   <div class="actions">
-    <% if session[:user_id] && @file.experiment.users.first(:id => @user.id)%>
+    <% if @file.experiment.users.first(:id => @user.id)%>
       <%= link_tag :to => "/file/#{@file.id}/edit", :name => 'Edit File', :class => 'btn' %>
-      <%= link_tag :to => "/file/#{@file.id}/download", :name => 'download', :class => 'btn'%>
-    <% elsif (session[:temp_user] == @file.id && session[:temp_user_type]=="dataset") || (session[:temp_user] == @file.experiment.id && session[:temp_user_type] == "experiment") %> 
-      <%= link_tag :to => "/file/#{@file.id}/download", :name => 'download', :class => 'btn'%>
-   	<% end %>
+    <% end %>
+    <%= link_tag :to => "/file/#{@file.id}/download", :name => 'download', :class => 'btn'%>
   </div>
