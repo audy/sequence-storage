@@ -23,6 +23,13 @@ helpers do
      redirect '/'
     end
   end
+  
+  def s3_connect
+    AWS::S3::Base.establish_connection!(
+      :access_key_id     => AWS_ACCESS_KEY,
+      :secret_access_key => AWS_SECRET
+    )
+  end
 end
 
 before do
@@ -390,12 +397,6 @@ end
 # Connection S3
 #
 
-def s3_connect
-  AWS::S3::Base.establish_connection!(
-    :access_key_id     => 'DIDUREALLYTRYTHIS',
-    :secret_access_key => 'SUPERCALIFRAGILISTICEXPIALIDOCIOUS'
-  )
-end
 
 #
 # Temporary Share Links

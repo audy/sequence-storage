@@ -14,8 +14,10 @@ require './models.rb'
 
 DataMapper.finalize
 
+AWS_ACCESS_KEY = ENV['AWS_ACCESS_KEY']
+AWS_SECRET = ENV['AWS_SECRET']
+
 configure :development do
-  FILES_ROUTE = "files/"
   require 'sinatra/reloader'
   DataMapper.setup(:default,
                    :adapter => 'sqlite',
@@ -25,14 +27,12 @@ configure :development do
 end
 
 configure :test do
-  FILES_ROUTE = "."
   DataMapper.setup(:default, "sqlite::memory:")
   DataMapper::Model.raise_on_save_failure = true
   DataMapper.auto_migrate!
 end
 
 configure :production do
-  FILES_ROUTE = "./files/"
   DataMapper.setup(:default, :adapter => 'sqlite', :database => ENV['DB_URL'])
 end
 
