@@ -1,7 +1,7 @@
 get '/file/:id' do
-  #authenticate!
+  authenticate!
   @file = Dataset.get(params[:id])
-  
+
   if session[:user_id]
        "ok"
   elsif (session[:temp_user_type] == "dataset" && session[:temp_user] == params[:id])||(session[:temp_user_type] == "experiment" && session[:temp_user] == @file.experiment.id)
@@ -9,7 +9,7 @@ get '/file/:id' do
   else
      redirect '/'
   end
-    
+
   if @file.nil?
     session[:error] = "no such file \'#{params[:id]}\'"
     redirect '/experiments'
