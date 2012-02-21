@@ -22,7 +22,7 @@ post '/file/edit' do
   authenticate!
   begin 
     file = Dataset.get(params[:file_id])
- 
+
     file.update(:name => params[:name]) 
     redirect "/experiment/#{file.experiment.id}"
   rescue
@@ -33,9 +33,9 @@ end
 
 get '/file/:id/edit' do
   authenticate!
-  
+
   @file = Dataset.get params[:id]
-  
+
   if @file.experiment.users.first(:id => session[:user_id]).nil?
     session[:error] = "You are not a owner, you can not modify"
     redirect '/'
@@ -43,20 +43,20 @@ get '/file/:id/edit' do
     session[:error] = "no such file \'#{params[:id]}\'"
     redirect '/experiments'
   end
-  
+
   erb :file_edit
 end
 
 get '/file/:id/delete' do
   authenticate!
-  
+
   @file = Dataset.get params[:id]
-  
+
   if @file.nil?
     session[:error] = 'Dataset file not found!'
     redirect '/experiments'
   end 
-  
+
   if @file.experiment.users.first(:id => @user.id).nil?
      session[:error] = "You cannot delete this file because you are not a owner"
      redirect '/experiments'
@@ -65,7 +65,6 @@ get '/file/:id/delete' do
   begin
     experiment_id = @file.experiment.id
     session[:error] = 'Delete has been disabled'  
-
     #@file.destroy
     #session[:flash] = 'deleted!'
     redirect "/experiment/#{experiment_id}"
