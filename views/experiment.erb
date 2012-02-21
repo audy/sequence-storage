@@ -18,7 +18,7 @@
       } else {
         content = "something went wrong :("
       }
-      $("#random_string_box").append("localhost:9292/path/"+content);
+      $("#random_string_box").append("http://triplab.ad.ufl.edu:3000/path/"+content);
       $("#sharelink").remove();
       });
     };
@@ -30,7 +30,7 @@
         } else {
           content = "something went wrong :("
         }
-        $("#sharelabel"+fileid).append("localhost:9292/path/"+content); 
+        $("#sharelabel"+fileid).append("http://triplab.ad.ufl.edu:3000/path/"+content); 
         $("#sharefile"+fileid).remove();
       });
     };
@@ -98,9 +98,6 @@
         <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn primary' %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/add_file", :name => 'Add File', :class => 'btn primary' %>
-        <%= link_tag :to => "/download/experiment/#{@experiment.id}", :name => 'Download Experiment', :class => 'btn primary' %>
- 	    <% elsif session[:temp_user] == @experiment.id && session[:temp_user_type] == "experiment "%>
- 	      <%= link_tag :to => "/download/experiment/#{@experiment.id}", :name => 'Download Experiment', :class => 'btn primary' %>
       <% end %>
     </div>
   </div>

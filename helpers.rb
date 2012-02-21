@@ -21,4 +21,11 @@ helpers do
      redirect '/'
     end
   end
+  
+  def s3_connect
+    AWS::S3::Base.establish_connection!(
+      :access_key_id     => AWS_ACCESS_KEY,
+      :secret_access_key => AWS_SECRET
+    )
+  end
 end
