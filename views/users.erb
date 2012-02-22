@@ -1,17 +1,10 @@
 <div class="page-header">
   <h1>Users</h1>
 </div>
-<div class="row">
-  <div class="span16">
-    <% if @users.length == 0 %>
-      <p>There are no users! <%= link_tag(:to => '/user/new', :name => 'create one!')%></p>
-    <% end %>
-  </div>
-</div>
   
-<div class="row">  
-  <div class="span16">  
-    <table class="bordered-table zebra-striped">
+<div class="row-fluid">
+  <div class="span12">  
+    <table class="table table-bordered table-striped">
       <thead>
         <tr>
           <th><!-- icon--></th>
