@@ -2,12 +2,11 @@
   <h1>New Experiment</h1>
 </div>
 
-<div class="row">
-  <div class="span8 offset4">
+<div class="row-fluid">
+  <div class="span12">
     
-    <form action="/experiment/new" method="post">
+    <form action="/experiment/new" method="post" class="well">
       <fieldset>
-        <legend>Information</legend>
         <div class="clearfix">
           <label for="name">Name</label>
           <div class="input">
@@ -19,7 +18,7 @@
           <label for="description">Description</label>
           <div class="input">
             <textarea class="xlarge" name="description" rows="10"></textarea>
-            <span class="help-inline">Describe the experiment (Optional)</span>
+            <span class="help-block">Describe the experiment (Optional)</span>
           </div>
         </div>
         
