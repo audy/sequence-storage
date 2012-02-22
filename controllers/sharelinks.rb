@@ -2,7 +2,7 @@
 # Temporary Share Links (JSON)
 #
 
-get '/sharelink/?' do
+get '/share/new?' do
   $stderr.puts params.inspect
   object = params[:for]
   id = params[:id]
@@ -32,46 +32,7 @@ get '/sharelink/?' do
   }.to_json
 end
 
-get '/getrandomstring/?' do
-  
-  $stderr.puts params.inspect
-
-  authenticate!
-  
-  # Get type of object sharelink is needed for, and its id
-  object = params[:object]
-  id = params[:id]
-  
-  # Attempt to find object in Database
-  ob =
-    case object
-    when 'experiment'
-      Experiment.get id
-    when 'dataset'
-      Dataset.get id
-    else
-      return { status: 'error' }.to_json
-    end
-  
-  # Complain if object doesn't exist
-  # ob.id rescue return { status: 'error' }.to_json
-  
-  # Create a new sharelink
-  s = Sharelink.new(object.to_sym => ob)
-    s.expire_at = Time.now + (2*7*24*60*60)      # To get 2 weeks = 2 * days*hours*minutes*seconds
-  if s.valid?                                  # Return JSON with response if valid
-    s.save
-    { 
-      :value => s.value,
-      :status => 'okay',
-      :expire_at => s.expire_at
-    }.to_json
-  else # Otherwise, Crap
-    return { status: 'error' }.to_json
-  end
-end
-
-get '/path/:long_string' do
+get '/share/:long_string' do
   @sharelink = Sharelink.first(:value => params[:long_string])
   
   if @sharelink.nil?

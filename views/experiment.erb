@@ -3,15 +3,13 @@
   <h1><%= @experiment.name %></h1>
 </div>
 
-<div class="row-fluid span-12">
+<div class="row-fluid span12">
   
-  <div class="share_button">
+  <div id="share_experiment">
 
     <% if @user %>
-      <a href="#" onClick="getShareExperiment(<%= @experiment.id %>);" id="share_experiment">Share</a>
+      <a href="#" onClick="getShareExperiment(<%= @experiment.id %>);">Share</a>
     <% end %>
-
-    <p id="random_string_box"></p>
   </div>
 
 
