@@ -5,41 +5,12 @@
 
 <div class="row-fluid span-12">
   
-  <%if @user.nil? %>
-    <script type = "text/javascript">
-      $(document).ready(function(){
-        $("#sharelink").remove();
-      });
-    </script>
-  <% end %>
-  
   <div class="share_button">
-    <script type="text/javascript">
-    getSharelink = function() {
-      $.getJSON("/getrandomstring/experiment/<%= @experiment.id %>", function(result) {
-      if (result.status == 'okay' && result.value ) {
-        content = result.value
-      } else {
-        content = "something went wrong :("
-      }
-      $("#random_string_box").append("http://triplab.ad.ufl.edu:3000/path/"+content);
-      $("#sharelink").remove();
-      });
-    };
-  
-    getSharefile = function(fileid){
-      $.getJSON("/getrandomstring/dataset/"+fileid, function(result){
-        if (result.status == 'okay' && result.value ) {
-          content = result.value
-        } else {
-          content = "something went wrong :("
-        }
-        $("#sharelabel"+fileid).append("http://triplab.ad.ufl.edu:3000/path/"+content); 
-        $("#sharefile"+fileid).remove();
-      });
-    };
-    </script>
-    <a href="#" onClick="getSharelink();" id="sharelink">Share</a>
+
+    <% if @user %>
+      <a href="#" onClick="getShareExperiment(<%= @experiment.id %>);" id="share_experiment">Share</a>
+    <% end %>
+
     <p id="random_string_box"></p>
   </div>
 
@@ -88,7 +59,7 @@
             <li>
               <a href="/file/<%= file.id %>"><%= file.name %> - <%= file.created_at%> - <%= file.user.name %></a>
               <% if @user %>
-                - <a href="#" onClick="getSharefile(<%= file.id %>);" id="sharefile<%= file.id %>">Share File</a>
+                - <a href="#" onClick="getShareFile(<%= file.id %>);" id="share_file_<%= file.id %>">Share File</a>
               <% end %>
               <a id="sharelabel<%= file.id%>"></a>
             </li>

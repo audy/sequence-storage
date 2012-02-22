@@ -1,9 +1,41 @@
-#
-# Temporary Share Links
+##
+# Temporary Share Links (JSON)
 #
 
-# THIS IS A JSON-ONLY ROUTE
-get '/getrandomstring/:object/:id' do
+get '/sharelink/?' do
+  $stderr.puts params.inspect
+  object = params[:for]
+  id = params[:id]
+  
+  ob = 
+    case object
+    when 'experiment'
+      Experiment.get id
+    when 'dataset'
+      Dataset.get id
+    else
+      return { :status => 'error', :message => 'invalid type' }.to_json
+    end
+  
+  s = Sharelink.new object.to_sym => ob
+  s.expire_at = Time.now + (2*7*60*60) # 2 weeks
+  begin
+    s.save
+  rescue
+    return { :status => 'error', :messages => 'could not save'}.to_json
+  end
+  
+  {
+    :status => 'okay',
+    :value => s.value,
+    :expire_at => s.expire_at
+  }.to_json
+end
+
+get '/getrandomstring/?' do
+  
+  $stderr.puts params.inspect
+
   authenticate!
   
   # Get type of object sharelink is needed for, and its id
