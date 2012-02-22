@@ -1,13 +1,16 @@
-<div class="row">
-  <div class="span8 offset4">
+<div class="row-fluid">
+  <h1 class="page-header">Login</h1>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
     <fieldset>
-      <legend>Login</legend>
       <form action="/session/new" method="post">
         
         <div class="clearfix">
           <label for="email">E-Mail:</label>
           <div class="input">
-            <input type="text" name="email"/>
+            <input type="text" name="email" placeholder="email@website.com"/>
           </div>
         </div>
         
@@ -19,7 +22,7 @@
         </div>
         
         <div class="actions">
-          <input type="submit" value="Login" class="btn primary"/>
+          <input type="submit" value="Login" class="btn-large btn-primary"/>
         </div>
       </form>
     <fieldset>
