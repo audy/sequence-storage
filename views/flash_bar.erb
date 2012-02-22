@@ -1,16 +1,16 @@
 <% if session[:flash] || session[:error] %>
 
-  <div class="row">
-    <div class="span10 offset3">
+  <div class="row-fluid">
+    <div class="span12">
 
       <% if session[:flash] %>
-        <div class="alert-message success">
+        <div class="alert alert-success">
           <%= session[:flash] %>
         </div>
       <% end %>
     
       <% if session[:error] %>
-        <div class="alert-message error">
+        <div class="alert alert-error">
           <%= session[:error] %>
         </div>
       <% end %>
