@@ -1,6 +1,5 @@
 get '/experiments?/?' do  
   authenticate!
-
   @experiments = Experiment.all
   erb :experiments
 end
@@ -10,22 +9,7 @@ get '/experiment/new' do
   erb :experiment_new
 end
 
-post '/experiment/new' do
-  authenticate!
-  begin
-    experiment = Experiment.create(params)
-    experiment.users << @user
-
-    experiment.save
-    session[:flash] = "Created a new experiment!"
-    redirect "/experiment/#{experiment.id}"
-  rescue
-    session[:error] = "Something went wrong"
-    redirect '/experiment/new'
-  end
-end
-
-get '/experiment/:id' do
+get '/experiment/:id/?' do
   authenticate!
 
   id = params[:id]
@@ -37,6 +21,46 @@ get '/experiment/:id' do
     session[:error] = "no such experiment \'#{params[:id]}\'"
     redirect '/experiments'
   end
+end
+
+post '/experiment/new?' do
+  authenticate!
+
+  experiment = Experiment.new
+
+  experiment.name = params[:name]
+  experiment.description = params[:description]
+  experiment.users << @user
+
+  begin
+    experiment.save
+  rescue
+    session[:error] = "Something went wrong"
+    redirect '/experiment/new'
+  end
+  session[:flash] = "Created a new experiment!"
+  redirect "/experiment/#{experiment.id}"
+end
+
+post '/experiment/:id/edit' do
+  $stderr.puts params.inspect
+  @experiment = Experiment.get params[:id]
+
+  if @experiment.users.first(:id => @user.id).nil?
+    session[:error] = "Unauthorized"
+  end
+  
+  begin
+    @experiment.update(
+      :name => params[:name],
+      :description => params[:description]
+    )
+  rescue
+    session[:error] = "Something went wrong"
+    redirect "/experiment/#{params[:id]}/"
+  end
+  session[:flash] = "Update Successful"
+  redirect "/experiment/#{params[:id]}"
 end
 
 get '/experiment/:id/delete' do
@@ -67,20 +91,6 @@ get '/experiment/:id/edit' do
     else
       erb :experiment_edit
     end
-  end
-end
-
-post '/experiment/edit' do
-  authenticate!
-  begin
-    experiment = Experiment.get(params[:id])
-    experiment.update(:name => params[:name], :description => params[:description], :update_at => Time.now)
-
-    session[:flash] = "Experiment updated!"
-    redirect "/experiment/#{experiment.id}"
-  rescue
-    session[:error] = "Update Error?! Please check fields again"
-    redirect '/experiments'
   end
 end
 

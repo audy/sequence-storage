@@ -1,7 +1,7 @@
 <div class="row-fluid">  
   <div class="span12">
     
-      <form action="/experiment/edit" method="post" class="well">
+      <form method="post" class="well">
         <fieldset>
           <div class="clearfix">
             <label for="name">Name</label>
@@ -16,7 +16,6 @@
               <textarea class="xlarge" name="description" rows="10" ><%= @experiment.description rescue nil %></textarea>
             </div>
           </div>
-          <input type="hidden" id="id" name="id" value="<%= @experiment.id rescue nil %>">
         </fieldset>
       
         <div class="actions">
