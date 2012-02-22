@@ -1,0 +1,30 @@
+<div class="row-fluid">  
+  <div class="span12">
+    
+      <form action="/experiment/edit" method="post" class="well">
+        <fieldset>
+          <div class="clearfix">
+            <label for="name">Name</label>
+            <div class="input">
+              <input class="xlarge" name="name" id="name" type="text" value="<%= @experiment.name rescue nil %>"/>
+            </div>
+          </div>
+        
+          <div class="clearfix">
+            <label for="description">Description</label>
+            <div class="input">
+              <textarea class="xlarge" name="description" rows="10" ><%= @experiment.description rescue nil %></textarea>
+            </div>
+          </div>
+          <input type="hidden" id="id" name="id" value="<%= @experiment.id rescue nil %>">
+        </fieldset>
+      
+        <div class="actions">
+          <input type="submit" value="Save" class="btn btn-primary"/>
+          <a class="btn btn-danger" onclick="history.go(-1)">Cancel</a>
+        </div>
+      </form>
+    
+    </div>
+  </div>
+</div>

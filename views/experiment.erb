@@ -103,7 +103,7 @@
       <% if session[:user_id] && !@experiment.users.first(:id => @user.id).nil? %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/edit", :name => 'Edit', :class => 'btn' %>
         <%= link_tag :to => "/experiment/#{@experiment.id}/add_owner", :name => 'Add Owner', :class => 'btn' %>
-        <%= link_tag :to => "/experiment/#{@experiment.id}/add_file", :name => 'Add File', :class => 'btn' %>
+        <%= link_tag :to => "/file/new?experiment=#{@experiment.id}", :name => 'Add File', :class => 'btn' %>
       <% end %>
     </div>
   </div>
