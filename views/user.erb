@@ -4,26 +4,27 @@
   </div>
   
   <div class="row">
-    <div class="span16">
+    <div class="span12">
       
       <p><a href="http://gravatar.com/emails"><img src="<%= gravatar(:email => @view_user[:email], :size => 100) %>"></a></p>
       <p><%= link_tag to: "mailto:" + @view_user.email, name: @view_user.email %></p>
 
       <hr/>
-
-      <h2>Experiments:</h2>
-      <%= "#{@view_user.name} has not created any experiments." if @view_user.experiments.length == 0 %>
-      <ul>
-        <% @view_user.experiments.each do |experiment| %>
-          <li><a href="/experiment/<%= experiment.id %>"><%= experiment.name %></a></li>
-        <% end %>
-      </ul>
+      <% if @user %>
+        <h2>Experiments:</h2>
+        <%= "#{@view_user.name} has not created any experiments." if @view_user.experiments.length == 0 %>
+        <ul>
+          <% @view_user.experiments.each do |experiment| %>
+            <li><a href="/experiment/<%= experiment.id %>"><%= experiment.name %></a></li>
+          <% end %>
+        </ul>
+      <% end %>
 
     </div>
   </div>    
 <% else %>
   <div class="row">
-    <div class="span16">
+    <div class="span12">
     	<p>That user doesn't exist!</p>
     </div>
   </div>
