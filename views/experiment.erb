@@ -60,17 +60,16 @@
                 <%= i +1 %>
               </td>
               <td>
-                <a href="<%= file.path %>"><%= file.name %></a>
+                <a href=/f/<%= file.id %>><%= file.name %></a>
               </td>
               <td>
                 Created: <%= pretty_time file.created_at %>
               </td>
               <td>
-                <a href="/f/<%= file.id %>">Download</a>
-              </td>
-              <td>
-                <a id="sharelabel<%= file.id%>"></a>
-                <a href="#" onClick="getShareFile(<%= file.id %>);" id="share_file_<%= file.id %>">Generate Public Link</a>
+                <a id="sharelabel<%= file.id %>"></a>
+                <% if @user %>
+                  <a href="#" onClick="getShareFile(<%= file.id %>);" id="share_file_<%= file.id %>">Share</a>
+                <% end %>
               </td>
             </tr>
             <% end %>
