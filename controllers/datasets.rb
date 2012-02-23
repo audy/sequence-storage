@@ -90,7 +90,13 @@ end
 
 get '/f/:id' do
   authenticate!
-  dataset = Dataset.get params[:id]
-  full_path = File.join(FILES_ROUTE, dataset.path)
-  send_file full_path, :filename => dataset.name, :type => 'Application/octet-stream'
+  s3_connect
+  filename = Dataset.get(params[:id]).path
+  begin
+    s3_url = AWS::S3::S3Object.url_for(filename, BUCKET_NAME, :use_ssl => true)
+  rescue
+    session[:error] = "S3"
+    redirect '/'
+  end
+  redirect s3_url
 end
