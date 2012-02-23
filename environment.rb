@@ -16,6 +16,7 @@ DataMapper.finalize
 
 AWS_ACCESS_KEY = ENV['AWS_ACCESS_KEY']
 AWS_SECRET = ENV['AWS_SECRET']
+FILES_ROUTE = ENV['FILES_ROUTE']
 
 configure :development do
   require 'sinatra/reloader'
