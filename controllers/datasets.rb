@@ -1,7 +1,47 @@
+get '/file/new/?' do
+  authenticate!
+  @experiment = Experiment.get(params[:experiment])
+  erb :file_new
+end
+
+post '/file/new/?' do
+  authenticate!
+  
+  @experiment = Experiment.get(params[:experiment])
+
+  if @experiment.nil?
+    session[:error] = "Experiment not found!"
+    redirect "/experiments"
+  end
+
+  dataset = Dataset.new
+
+  dataset.path       = "#{params[:name]}"
+  dataset.size       = 100
+  dataset.mdsum      = "ok"
+  dataset.experiment = @experiment
+  dataset.user       = @user
+
+  dataset.save
+  
+  session[:flash] = "File successfully added to #{@experiment.name}"
+  redirect "/experiment/#{@experiment.id}"
+end
+
+put '/file/:id?' do
+  authenticate!
+  $stderr.puts "HELLLOOOOOO"
+  @file = Datset.get params[:file_id]
+  @file.inspect
+  session[:flash] = "Updated File!"
+  redirect "/file/#{@file.id}"
+end
+
 get '/file/:id' do
   authenticate!
-  @file = Dataset.get(params[:id])
 
+  @file = Dataset.get(params[:id])
+  @experiment = @file.experiment
   if session[:user_id]
        "ok"
   elsif (session[:temp_user_type] == "dataset" && session[:temp_user] == params[:id])||(session[:temp_user_type] == "experiment" && session[:temp_user] == @file.experiment.id)
@@ -16,35 +56,6 @@ get '/file/:id' do
   else
     erb :file
   end
-end
-
-post '/file/edit' do
-  authenticate!
-  begin 
-    file = Dataset.get(params[:file_id])
-
-    file.update(:name => params[:name]) 
-    redirect "/experiment/#{file.experiment.id}"
-  rescue
-    session[:error] = "Update not succesful!"
-    redirect '/experiments'
-  end
-end
-
-get '/file/:id/edit' do
-  authenticate!
-
-  @file = Dataset.get params[:id]
-
-  if @file.experiment.users.first(:id => session[:user_id]).nil?
-    session[:error] = "You are not a owner, you can not modify"
-    redirect '/'
-  elsif @file.nil?
-    session[:error] = "no such file \'#{params[:id]}\'"
-    redirect '/experiments'
-  end
-
-  erb :file_edit
 end
 
 get '/file/:id/delete' do

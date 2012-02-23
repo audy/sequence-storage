@@ -2,9 +2,10 @@
 <html>
   <head>
     <title>Sequences</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheets/bootstrap.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/stylesheets/style.css" type="text/css" media="screen" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   </head>
   <body>
     
@@ -14,21 +15,20 @@
       
       <%= erb :flash_bar %>
       
-      <div class="row">
-        <div class="span16">
-          <%= yield %>
-        </div>
-      </div>
+      <%= yield %>
       
     </div><!-- container -->
     
     <footer>
       <div class="row">
-        <div class="span14 offset1">
+        <div class="span12">
           
         </div>
       </div>
     </footer>
     
+  <!-- load javascript at end -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/javascripts/app.js"></script>
   </body>
 </html>

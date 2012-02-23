@@ -1,45 +1,38 @@
-#
-# Temporary Share Links
+##
+# Temporary Share Links (JSON)
 #
 
-# THIS IS A JSON-ONLY ROUTE
-get '/getrandomstring/:object/:id' do
-  authenticate!
-  
-  # Get type of object sharelink is needed for, and its id
-  object = params[:object]
+get '/share/new?' do
+  $stderr.puts params.inspect
+  object = params[:for]
   id = params[:id]
   
-  # Attempt to find object in Database
-  ob =
+  ob = 
     case object
     when 'experiment'
       Experiment.get id
     when 'dataset'
       Dataset.get id
     else
-      return { status: 'error' }.to_json
+      return { :status => 'error', :message => 'invalid type' }.to_json
     end
   
-  # Complain if object doesn't exist
-  # ob.id rescue return { status: 'error' }.to_json
-  
-  # Create a new sharelink
-  s = Sharelink.new(object.to_sym => ob)
-    s.expire_at = Time.now + (2*7*24*60*60)      # To get 2 weeks = 2 * days*hours*minutes*seconds
-  if s.valid?                                  # Return JSON with response if valid
+  s = Sharelink.new object.to_sym => ob
+  s.expire_at = Time.now + (2*7*60*60) # 2 weeks
+  begin
     s.save
-    { 
-      :value => s.value,
-      :status => 'okay',
-      :expire_at => s.expire_at
-    }.to_json
-  else # Otherwise, Crap
-    return { status: 'error' }.to_json
+  rescue
+    return { :status => 'error', :messages => 'could not save'}.to_json
   end
+  
+  {
+    :status => 'okay',
+    :value => s.value,
+    :expire_at => s.expire_at
+  }.to_json
 end
 
-get '/path/:long_string' do
+get '/share/:long_string' do
   @sharelink = Sharelink.first(:value => params[:long_string])
   
   if @sharelink.nil?

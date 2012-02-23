@@ -19,6 +19,7 @@ AWS_SECRET = ENV['AWS_SECRET']
 
 configure :development do
   require 'sinatra/reloader'
+  $stderr.puts 'development!'
   DataMapper.setup(:default,
                    :adapter => 'sqlite',
                    :database => ENV['DB_URL'] || File.join('db', 'development.db'))

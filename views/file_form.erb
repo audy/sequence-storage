@@ -1,0 +1,21 @@
+<div class="row-fluid">
+  <div class="span12">
+      <form action="/file/<%= @file.id rescue 'new' %>" method="<%= @file.nil? ? 'post' : 'put' %>">
+        <fieldset>
+          <div class="clearfix">
+            <label for="name">Name</label>
+            <div class="input">
+              <input class="xlarge" name="name" id="name" type="text" value="<%= @file.name rescue nil %>"/>
+            </div>
+          </div>
+          <input type="hidden" id="file_id" name="file_id" value="<%= @file.id rescue nil %>">
+        </fieldset>
+        <input type="hidden" name="experiment" value="<%= @experiment.id rescue nil %>">
+        <div class="actions">
+          <input type="submit" value="Save" class="btn primary"/>
+          <a class="btn" onclick="history.go(-1)">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

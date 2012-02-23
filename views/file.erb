@@ -1,21 +1,23 @@
 <div class="page-header">
   <h1><%= @file.name %></h1>
 </div>
-<p>Created: <%= pretty_time @file.created_at %></p>
-<% if !@file.user.nil? %>
-  <% file_creator = @file.user %>
-  <p>
-    Created by: <%= file_creator.name %>  
-    (<%= link_tag to: "mailto:" + file_creator.email, name: file_creator.email %>)
-  </p>
-<% else %>
-  <p>This file was created without owner.</p>
-<% end %>
-<p>File size: <%= @file.size %></p>
 
-  <div class="actions">
-    <% if @file.experiment.users.first(:id => @user.id)%>
-      <%= link_tag :to => "/file/#{@file.id}/edit", :name => 'Edit File', :class => 'btn' %>
-    <% end %>
-    <%= link_tag :to => "/file/#{@file.id}/download", :name => 'download', :class => 'btn'%>
+<div class="row-fluid">
+  <div class="span12">
+    <p>Created: <%= pretty_time @file.created_at %> by <%= @file.user.name %></p>
   </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <p>File size: <%= @file.size %></p>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <div class="actions">
+      <%= link_tag :to => "/file/#{@file.id}/download", :name => 'Download', :class => 'btn' %>
+    </div>
+  </div>
+</div>
