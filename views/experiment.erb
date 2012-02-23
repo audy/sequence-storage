@@ -66,6 +66,9 @@
                 Created: <%= pretty_time file.created_at %>
               </td>
               <td>
+                <a href="/f/<%= file.id %>">Download</a>
+              </td>
+              <td>
                 <a id="sharelabel<%= file.id%>"></a>
                 <a href="#" onClick="getShareFile(<%= file.id %>);" id="share_file_<%= file.id %>">Generate Public Link</a>
               </td>
