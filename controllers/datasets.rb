@@ -93,7 +93,7 @@ get '/f/:id' do
   filename = Dataset.get(params[:id]).path
   s3_url = 
     begin
-      DatasetFile.url_for filename, :use_ssl => true
+      AWS::S3::S3Object.url_for(filename, BUCKET_NAME, :use_ssl => true)
     rescue
       session[:error] = "There was a problem with S3."
       redirect '/'
