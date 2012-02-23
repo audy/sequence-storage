@@ -35,8 +35,9 @@ end
 get '/share/:long_string' do
   @sharelink = Sharelink.first(:value => params[:long_string])
   
+  
   if @sharelink.nil?
-    session[:error] = "No such Experiment"
+    session[:error] = "Invalid Link"
     redirect "/"
   end
   if @sharelink.expire_at < DateTime.now
@@ -45,6 +46,9 @@ get '/share/:long_string' do
     session[:error] = 'The link has expired'
     redirect '/'
   end
+
+  session[:flash] = "<strong>Howdy, stranger!</strong> It looks like someone is sharing sequence data with you. Go ahead and download it."
+
   if @sharelink.experiment
     @experiment = @sharelink.experiment
     session[:temp_user_type] = "experiment"
