@@ -1,14 +1,24 @@
 <div class="page-header">
   <h1>Found <%= @results.length %> results for: "<%= params[:q]%>"</h1>
 </div>
-<ul>
-<% if @results.length > 0 %>
-  <% @results.each do |result| %>
-    <% if result.model == User %>
-      <li>User, <a href="/user/<%= result.id %>"><%= result.name %></a></li>
-    <% elsif result.model == Experiment %>
-      <li>Experiment: <a href="/experiment/<%= result.id %>"><%= result.name %></a> - <%= result.description %></li>
+
+<div class='row-fluid'>
+  <div class='span12'>
+    <% if @results.length > 0 %>
+      <table class='table-bordered table-striped table'>
+        <tbody>
+          <% @results.each_with_index do |result, i| %>
+            <tr onClick="document.location.href='<%= result.to_url rescue '/404' %>';" style='cursor:pointer;'>
+              <td>
+                <%= i +1 %>
+              </td>
+              <td>
+                The <strong><%= result.model.to_s.downcase %></strong> named <strong><%= result.name %></strong>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     <% end %>
-  <% end %>
-</ul>
-<% end %>
+  </div>
+</div>

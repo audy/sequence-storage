@@ -10,9 +10,24 @@ end
 #
 get '/search/?' do
   authenticate!
-  $stderr.puts params
-  query = "%#{params[:q]}%"
+
+  query = "%#{params[:q].strip}%"
+
   @results = Set.new
-  @results = (User.all(:name.like => query) | User.all(:email.like => query)).to_set + (Experiment.all(:name.like => query) | Experiment.all(:description.like => query)).to_set
+  # Query Users
+  @results.merge(
+    User.all(:name.like => query) |
+    User.all(:email.like => query)
+  )
+
+  # Query Experiments
+  @results.merge(
+    Experiment.all(:name.like => query) |
+    Experiment.all(:description.like => query)
+  )
+
+  # Query Datasets
+  @results.merge Dataset.all(:path.like => query)
+
   erb :search
 end

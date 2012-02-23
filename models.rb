@@ -17,6 +17,11 @@ class Experiment
   has n, :users, :through => Resource
   
   validates_presence_of :name
+  
+  # Generates a link to this object
+  def to_url
+    "/experiment/#{self.id}"
+  end
 end
 
 # The User Model
@@ -42,6 +47,11 @@ class User
   validates_format_of        :email,    :with => :email_address
   validates_presence_of      :password, :if => :password_required
   validates_presence_of      :name
+  
+  # Generates a link to this object
+  def to_url
+    "/user/#{self.id}"
+  end
   
   ##
   # This method is for authentication purpose
@@ -86,7 +96,12 @@ class Dataset
   
   belongs_to :user
   belongs_to :experiment
-  
+
+  # Generates a link to this object
+  def to_url
+    "/file/#{self.id}"
+  end
+
   def name
     File.basename(self.path)
   end
