@@ -35,7 +35,14 @@ namespace :db do
 
   desc "auto migrate the database"
   task :automigrate do
+    fail 'DONT DO THIS ON PRODUCTION' if ENV['RACK_ENV'] == 'production'
     load 'environment.rb'
     DataMapper.auto_migrate!
+  end
+  
+  desc "auto upgrade the database"
+  task :autoupgrade do
+    load 'environment.rb'
+    DataMapper.auto_upgrade!
   end
 end
