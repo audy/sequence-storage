@@ -84,19 +84,19 @@ get '/file/:id/delete' do
   end
 end
 
-#
+##
 # File downloading
 #
-
 get '/f/:id' do
   authenticate!
   s3_connect
   filename = Dataset.get(params[:id]).path
-  begin
-    s3_url = AWS::S3::S3Object.url_for(filename, BUCKET_NAME, :use_ssl => true)
-  rescue
-    session[:error] = "S3"
-    redirect '/'
-  end
+  s3_url = 
+    begin
+      DatasetFile.url_for filename, :use_ssl => True
+    rescue
+      session[:error] = "There was a problem with S3."
+      redirect '/'
+    end
   redirect s3_url
 end

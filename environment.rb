@@ -15,8 +15,13 @@ require './models.rb'
 DataMapper.finalize
 
 AWS_ACCESS_KEY = ENV['AWS_ACCESS_KEY']
-AWS_SECRET = ENV['AWS_SECRET']
-FILES_ROUTE = ENV['FILES_ROUTE']
+AWS_SECRET     = ENV['AWS_SECRET']
+FILES_ROUTE    = ENV['FILES_ROUTE']
+BUCKET_NAME    = ENV['BUCKET_NAME']
+
+class DatasetFile < AWS::S3::S3Object
+  set_current_bucket_to BUCKET_NAME
+end
 
 configure :development do
   require 'sinatra/reloader'
