@@ -11,7 +11,6 @@ get '/user/new' do
 end
 
 get '/user/:id' do
-  authenticate!
   @view_user = User.get(params[:id])
   erb :user
 end
