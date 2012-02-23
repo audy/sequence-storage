@@ -1,23 +1,12 @@
-<% if session[:flash] || session[:error] %>
-
-  <div class="row-fluid">
-    <div class="span12">
-
-      <% if session[:flash] %>
-        <div class="alert alert-success">
-          <%= session[:flash] %>
+<% [:flash, :error, :info].each do |x| %>
+  <% if session[x] %>
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="alert alert-<%= x == :flash ? :success : x.to_s %>">
+          <%= session[x] %>
+          <% session[x] = nil %>
         </div>
-      <% end %>
-    
-      <% if session[:error] %>
-        <div class="alert alert-error">
-          <%= session[:error] %>
-        </div>
-      <% end %>
-  
+      </div>
     </div>
-  </div>
-
-  <% session[:flash], session[:error] = nil, nil %>
-
+  <% end %>
 <% end %>
