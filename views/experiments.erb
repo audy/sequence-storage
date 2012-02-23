@@ -21,6 +21,7 @@
         </thead>
         <tbody>
           <% @experiments.each do |experiment| %>
+            <tr onClick="document.location.href='<%= experiment.to_url rescue '/404' %>';" style='cursor:pointer;'>
               <td>
                 <%= experiment.id  %>
               </td>

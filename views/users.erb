@@ -18,7 +18,7 @@
       </thead>
       <tbody>
         <% @users.each do |user| %>
-          <tr>
+          <tr onClick="document.location.href='<%= user.to_url rescue '/404' %>';" style='cursor:pointer;'>
             <td>
               <img src="<%= gravatar(:email => user[:email], :size => 16) %>">
             </td>
