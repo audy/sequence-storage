@@ -1,5 +1,5 @@
 <div class="row-fluid">  
-  <div class="span12">
+  <div class="span8">
     
       <form method="post" class="well">
         <fieldset>
@@ -13,7 +13,7 @@
           <div class="clearfix">
             <label for="description">Description</label>
             <div class="input">
-              <textarea class="xlarge" name="description" rows="10" ><%= @experiment.description rescue nil %></textarea>
+              <textarea class="xlarge" name="description" rows="10" placeholder="markdown is supported."><%= @experiment.description rescue nil %></textarea>
             </div>
           </div>
         </fieldset>

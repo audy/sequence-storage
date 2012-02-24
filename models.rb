@@ -22,6 +22,10 @@ class Experiment
   def to_url
     "/experiment/#{self.id}"
   end
+
+  def render_description
+    RDiscount.new(self.description).to_html rescue nil
+  end
 end
 
 # The User Model

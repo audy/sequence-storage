@@ -8,6 +8,7 @@ require 'bcrypt'
 require 'json'
 require 'securerandom'
 require 'aws/s3'
+require 'rdiscount'
 
 # Load and finalize models
 require './models.rb'
