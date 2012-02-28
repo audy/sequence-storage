@@ -10,42 +10,49 @@ AWS::S3::Base.establish_connection!(
 bucket = AWS::S3::Bucket.find(BUCKET_NAME)
 baby = bucket.objects
 
+experiment = nil   # need so experiment won't be deallocated when looping
+
 num_files_created = 0
 num_dataset_missing = 0
 num_dataset_here = 0
 access = 0;
 puts "\n"
 
-## This creates an experiment even if no datasets are missing, not good ##
-experiment = Experiment.new
-experiment.name = BUCKET_NAME
-experiment.description = "Created on #{Time.now} by Data for #{BUCKET_NAME}"
-if experiment.save
-  puts 'New experiment created'
-  access = access + 1
-end
-
 if user = User.get(5) 
   puts "Using user #{user.id}, #{user.name}"
-  access = access + 1
-end  
+else
+  puts "error: Cannot get user 5"
+  exit  
+end
 
 baby.each do |b|
 
-    puts filename = b.path.gsub("/#{BUCKET_NAME}/", "")
+    filename = b.path.gsub("/#{BUCKET_NAME}/", "")
+    
+    # Check if the dataset is in s3, create it, if not.
     if !Dataset.first(:path => filename)
       
       size = b.size # gets file size from s3
-      if size.to_i >  0 && access == 2
+      
+      # file has to be greater than zero, so directorys will not be created as datasets
+      if size.to_i > 0
+        
+        # if it is the first missing, then create a new experiment
+        if num_dataset_missing == 0
+          experiment = Experiment.first_or_create({:name => BUCKET_NAME},{:description => "Created on #{Time.now} by Data for #{BUCKET_NAME}"})
+          break if !experiment
+        end
+        
         # create dataset
         unparsed_chksum  = b.about().to_a[4][1]
         
         file = Dataset.new
-        puts file.path   = filename
-        puts file.size   = size
-        puts file.mdsum  = unparsed_chksum[3..unparsed_chksum.length]  # get checksum from s3,
-        puts file.experiment = experiment
-        puts file.user = user
+        file.path   = filename
+        file.size   = size
+        file.mdsum  = unparsed_chksum[3..unparsed_chksum.length]  # get checksum from s3,
+        file.experiment = experiment
+        file.user = user
+        
         if file.save 
           puts "#{filename} created"
           num_files_created = num_files_created + 1
@@ -55,7 +62,7 @@ baby.each do |b|
         num_dataset_missing = num_dataset_missing + 1
       end
     else
-      puts "Here!"
+      puts "Here!  #{filename}"
       num_dataset_here = num_dataset_here + 1
     end
 end
