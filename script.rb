@@ -16,6 +16,8 @@ puts "\n\n\nchecking for files in #{FILES_ROUTE}\n\n"
 count=0
 am_count=0
 md5_count=0
+am_ds_count=0
+am_ds_mismatch=0
 total_md5_count=0
 
 Dataset.each do |d|
@@ -51,6 +53,14 @@ Dataset.each do |d|
       puts "The md5 does NOT match"
     end
   end
+  
+  if amazon_file_present  && amazonmd5 == d.mdsum
+    puts "amazon m5sum matched with dataset md5sum"
+    am_ds_count = am_ds_count + 1
+  else
+    puts "amazon m5sum NOT matched with dataset md5sum"
+    am_ds_mismatch = am_ds_mismatch + 1
+  end
   puts ""
 end
 puts "There are #{count} files missing from local server"
@@ -58,4 +68,5 @@ puts "There are #{am_count} files missing from amazon s3"
 puts "The total md5sum compared: #{total_md5_count}"
 puts "There are #{total_md5_count - md5_count} compares that match"
 puts "There are #{md5_count} compares that do NOT match"
+puts "#{am_ds_count} out of #{am_ds_count + am_ds_mismatch} amazon md5 compares with datset md5 match"
 puts ""
