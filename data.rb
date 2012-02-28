@@ -7,6 +7,8 @@ AWS::S3::Base.establish_connection!(
   :secret_access_key => AWS_SECRET
 )
 
+puts "\n"
+
 bucket = AWS::S3::Bucket.find(BUCKET_NAME)
 baby = bucket.objects
 
@@ -16,12 +18,12 @@ num_files_created = 0
 num_dataset_missing = 0
 num_dataset_here = 0
 access = 0;
-puts "\n"
 
-if user = User.get(5) 
+USER_NUM = 1
+if user = User.get(USER_NUM) 
   puts "Using user #{user.id}, #{user.name}"
 else
-  puts "error: Cannot get user 5"
+  puts "error: Cannot get user #{USER_NUM}"
   exit  
 end
 
@@ -39,7 +41,12 @@ baby.each do |b|
         
         # if it is the first missing, then create a new experiment
         if num_dataset_missing == 0
-          experiment = Experiment.first_or_create({:name => BUCKET_NAME},{:description => "Created on #{Time.now} by Data for #{BUCKET_NAME}"})
+          experiment = Experiment.first_or_create({:name => BUCKET_NAME},{:description => "Created on #{Time.now} by #{user.name} for #{BUCKET_NAME}"})
+          if experiment.users.first.nil?
+            user.experiments << experiment
+            user.save
+            puts "#{experiment.name} linked to #{user.name}"
+          end
           break if !experiment
         end
         
