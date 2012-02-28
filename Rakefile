@@ -12,6 +12,22 @@ task :spec do
   sh "rspec"
 end
 
+desc "delete old sharelinks"
+task :delete_old do
+  puts "Deleting all old sharelinks\n\ "
+  old_shares = Sharelink.all(:expire_at.lt => Time.now.to_date)
+
+  old_shares.each do |share|
+    puts  share.value
+    if share.destroy
+      puts "deleted!"
+    else
+      puts "error: could not delete"
+    end
+  end
+  puts "Finish deleting"
+end
+
 namespace :db do
 
   desc "seed the database with informatione"
