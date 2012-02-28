@@ -9,6 +9,30 @@ helpers do
     t.strftime("%m/%d/%y")
   end
   
+  # pretty size format
+  def pretty_size(newSize)
+    count = 0
+    while (newSize/1024) >= 1
+      newSize=newSize/1024.0
+      count = count + 1
+      if count == 4
+        break
+      end
+    end
+    
+    if count == 0
+      "#{newSize}B"
+    elsif count == 1
+      "%.2f\tKB" % newSize
+    elsif count == 2
+      "%.2f\tMB" % newSize
+    elsif count == 3
+      "%.2f\tGB" % newSize
+    elsif count >= 4
+      "%.2f\tTB" % newSize
+    end
+  end
+  
   # returns url for gravatar
   def gravatar(args={})
     email = args[:email]
