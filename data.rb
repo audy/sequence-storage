@@ -19,7 +19,7 @@ num_dataset_missing = 0
 num_dataset_here = 0
 access = 0;
 
-USER_NUM = 1
+USER_NUM = 5
 if user = User.get(USER_NUM) 
   puts "Using user #{user.id}, #{user.name}"
 else
