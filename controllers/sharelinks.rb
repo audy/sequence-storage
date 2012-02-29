@@ -35,7 +35,6 @@ end
 get '/share/:long_string' do
   @sharelink = Sharelink.first(:value => params[:long_string])
   
-  
   if @sharelink.nil?
     session[:error] = "Invalid Link"
     redirect "/"

@@ -88,12 +88,26 @@ end
 # File downloading
 #
 get '/f/:id' do
-  authenticate!
+
+  dataset = Dataset.get params[:id]
+  unless params[:share]
+    authenticate!
+  else
+    sl = Sharelink.get params[:share]
+    
+    correct_dataset = (sl.dataset_id && (sl.dataset_id != dataset.id))
+    
+    correct_experiment = (sl.experiment_id && (Experiment.get(sl.experiment_id).datasets.include? dataset))
+    
+    redirect '/' unless correct_dataset || correct_experiment
+
+  end
+
   s3_connect
-  filename = Dataset.get(params[:id]).path
+  
   s3_url = 
     begin
-      AWS::S3::S3Object.url_for(filename, BUCKET_NAME, :use_ssl => true)
+      AWS::S3::S3Object.url_for(dataset.path, BUCKET_NAME, :use_ssl => true)
     rescue
       session[:error] = "There was a problem with S3."
       redirect '/'
