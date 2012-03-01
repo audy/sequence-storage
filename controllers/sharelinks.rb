@@ -18,7 +18,7 @@ get '/share/new?' do
     end
   
   s = Sharelink.new object.to_sym => ob
-  s.expire_at = Time.now + (2*7*60*60) # 2 weeks
+  s.expire_at = Time.now + (2*7*24*60*60) # 2 weeks
   begin
     s.save
   rescue
