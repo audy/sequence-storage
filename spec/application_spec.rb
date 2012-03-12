@@ -9,12 +9,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
   it 'should have a link to login' do
     get '/'
-    response_body.should contain 'login'
-  end
-
-  it 'should have a link to join' do
-    get '/'
-    response_body.should contain 'join'
+    response_body.should contain 'Login'
   end
 end
 

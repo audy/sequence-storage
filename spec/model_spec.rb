@@ -121,6 +121,7 @@ describe 'Dataset' do
       :mdsum => 'okok',
       :user => user,
       :experiment => experiment,
+      :last_modified => DateTime.now,
     )
   }
   
@@ -142,6 +143,10 @@ describe 'Dataset' do
   
   it 'has a create time' do
     dataset.created_at.should_not be_nil
+  end
+  
+  it 'has a modified time' do
+    dataset.last_modified.should_not be_nil
   end
   
   it 'has a path' do

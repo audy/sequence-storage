@@ -95,6 +95,7 @@ class Dataset
   property :created_at, DateTime
   property :path,       String # /path/to/thefile.ext
   property :mdsum,      String
+  property :last_modified, DateTime
   
   has n, :sharelinks
   
