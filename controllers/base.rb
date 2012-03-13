@@ -2,6 +2,12 @@
 # Home
 #
 get '/' do
+  if @user
+    @experiments = Experiment.all.first(10)
+    @stats = {
+      :total_file_size => Dataset.map(&:size).inject(0, :+),
+    }
+  end
   erb :home
 end
 

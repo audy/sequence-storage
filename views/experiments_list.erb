@@ -1,0 +1,30 @@
+<table class="table-bordered table-striped table">
+  <thead>
+    <tr>
+      <th>
+        ID
+      </td>
+      <th>
+        Name
+      </th>
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @experiments.each do |experiment| %>
+      <tr onClick="document.location.href='<%= experiment.to_url rescue '/404' %>';" style='cursor:pointer;'>
+        <td>
+          <%= experiment.id  %>
+        </td>
+        <td>
+          <%= link_tag(:to => "/experiment/#{experiment.id}", :name => experiment.name) %> 
+        </td>
+        <td>
+          <%= experiment.description[0..300] rescue 'N/A' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
