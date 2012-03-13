@@ -19,6 +19,7 @@ post '/file/new/?' do
   dataset.path       = "#{params[:name]}"
   dataset.size       = 100
   dataset.mdsum      = "ok"
+  dataset.last_modified = DateTime.now
   dataset.experiment = @experiment
   dataset.user       = @user
 

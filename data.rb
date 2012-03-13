@@ -52,6 +52,7 @@ baby.each do |b|
       file.path   = filename
       file.size   = size
       file.mdsum  = chksum  # get checksum from s3,
+      file.last_modified = DateTime.now
       file.experiment = experiment
       file.user = user
         
