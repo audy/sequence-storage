@@ -1,15 +1,21 @@
 <% if @user %>
-  <div class="page-header">
-    <h1>Recent Updates</h1>
+
+
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="page-header">
+        <h1>Statistics</h1>
+      </div>
+      Total Bucket Size: <%= pretty_size @stats[:total_file_size] %>
+    </div>
   </div>
 
   <div class="row-fluid">
     <div class="span12">
-      <ul>
-        <% Experiment.all.first(5).each do |e| %>
-          <li><%= pretty_time(e.created_at) %> - <%= link_tag to: "/experiment/#{e.id}", name: e.name %> - <%= e.description %></li>
-        <% end %>
-      </ul>
+      <div class="page-header">
+        <h1>Latest Updates</h1>
+      </div>
+      <%= erb :experiments_list %>
     </div>
   </div>
 <% else %>

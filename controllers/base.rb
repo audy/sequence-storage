@@ -2,6 +2,12 @@
 # Home
 #
 get '/' do
+  if @user
+    @experiments = Experiment.all.last(10).reverse
+    @stats = {
+      :total_file_size => Dataset.map(&:size).compact.inject(0, :+),
+    }
+  end
   erb :home
 end
 
