@@ -80,7 +80,6 @@ task :create_files do
   num_files_created = 0
   num_dataset_missing = 0
   num_dataset_here = 0
-  access = 0
    
   if user
     puts "Using user #{user.id}, #{user.name}"
