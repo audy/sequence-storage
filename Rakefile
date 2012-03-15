@@ -41,7 +41,7 @@ task :update_files do
     if d.size == 100
       if file_exists = (File.exist? p)
         new_file_size = File.new(p).size
-        if d.update(:size => new_file_size)
+        if d.update(:size => new_file_size, :last_modified => DateTime.now)
           puts "  updated size to #{new_file_size}"
         else
           puts "  update size error"
@@ -53,7 +53,7 @@ task :update_files do
 
     if d.mdsum == "ok" && file_exists
       local_md5 = Digest::MD5.file(p)
-      if d.update(:mdsum => local_md5)
+      if d.update(:mdsum => local_md5, :last_modified => DateTime.now)
         puts "  updates md5 to #{local_md5}"
       else
         puts "  update md5 error"
@@ -71,18 +71,16 @@ task :create_files do
     :access_key_id     => AWS_ACCESS_KEY,
     :secret_access_key => AWS_SECRET
   )
- 
-  bucket = AWS::S3::Bucket.find(BUCKET_NAME)
-  baby = bucket.objects
   
+  obj = AWS::S3::Bucket.find(BUCKET_NAME).objects
+  
+  USER_NUM = 5
   user = User.get(USER_NUM)
   
   num_files_created = 0
   num_dataset_missing = 0
   num_dataset_here = 0
-  access = 0;
-
-  USER_NUM = 5
+  access = 0
    
   if user
     puts "Using user #{user.id}, #{user.name}"
@@ -91,7 +89,7 @@ task :create_files do
     exit  
   end
 
-  baby.each do |b|
+  obj.each do |b|
 
     filename = b.path.gsub("/#{BUCKET_NAME}/", "")
     dirname = File.dirname(filename)
@@ -124,15 +122,15 @@ task :create_files do
 
         if file.save 
           puts "#{filename} created"
-          num_files_created = num_files_created + 1
+          num_files_created += 1
         else
           puts "error: #{filename} could not be created"
         end
-        num_dataset_missing = num_dataset_missing + 1
+        num_dataset_missing += 1
       end
     else
       puts "Here!  #{filename}"
-      num_dataset_here = num_dataset_here + 1
+      num_dataset_here += 1
     end
   end
 
@@ -150,9 +148,8 @@ task :check_md5 do
     :access_key_id     => AWS_ACCESS_KEY,
     :secret_access_key => AWS_SECRET
   )
-
-  bucket = AWS::S3::Bucket.find('triplett-sequence-bucket', :prefix => 'baby_metagenomes') 
-  baby = bucket.objects
+  bucket = AWS::S3::Bucket.find('triplett-sequence-bucket') 
+  
   puts "\n\n\nchecking for files in #{FILES_ROUTE}\n\n"
   count=0
   am_count=0
