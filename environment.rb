@@ -10,7 +10,6 @@ require 'json'
 require 'securerandom'
 require 'aws/s3'
 require 'rdiscount'
-require 'pry'
 
 # Load and finalize models
 require './models.rb'
@@ -25,8 +24,6 @@ AWS_SECRET     = settings.aws_secret
 FILES_ROUTE    = settings.files_route
 BUCKET_NAME    = settings.bucket_name
 DATABASE       = settings.database
-
-binding.pry
 
 # Connect to S3 bucket
 class DatasetFile < AWS::S3::S3Object
