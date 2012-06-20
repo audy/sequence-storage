@@ -8,7 +8,7 @@ gem "rdiscount"
 gem "data_mapper"
 
 group :development do
-  gem "mina"
+  gem "mina", '~> 0.1.2.pre1', :git => 'https://github.com/nadarei/mina.git'
   gem "pry"
   gem "sinatra-reloader"
 end
