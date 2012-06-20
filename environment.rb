@@ -18,6 +18,8 @@ DataMapper.finalize
 
 config_file 'config/config.yml'
 
+use :sessions
+
 # TODO, just access these variables using settings
 AWS_ACCESS_KEY = settings.aws_access_key
 AWS_SECRET     = settings.aws_secret
