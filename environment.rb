@@ -1,5 +1,6 @@
 # Gems
 require 'sinatra'
+require 'sinatra/config_file'
 require 'dm-core'
 require 'dm-migrations'
 require 'dm-validations'
@@ -9,39 +10,41 @@ require 'json'
 require 'securerandom'
 require 'aws/s3'
 require 'rdiscount'
+require 'pry'
 
 # Load and finalize models
 require './models.rb'
 
 DataMapper.finalize
 
-AWS_ACCESS_KEY = ENV['AWS_ACCESS_KEY']
-AWS_SECRET     = ENV['AWS_SECRET']
-FILES_ROUTE    = ENV['FILES_ROUTE']
-BUCKET_NAME    = ENV['BUCKET_NAME']
+config_file 'config/config.yml'
 
+# TODO, just access these variables using settings
+AWS_ACCESS_KEY = settings.aws_access_key
+AWS_SECRET     = settings.aws_secret
+FILES_ROUTE    = settings.files_route
+BUCKET_NAME    = settings.bucket_name
+DATABASE       = settings.database
+
+binding.pry
+
+# Connect to S3 bucket
 class DatasetFile < AWS::S3::S3Object
   set_current_bucket_to BUCKET_NAME
 end
 
-configure :development do
+# Connect to database
+DataMapper.setup(:default, :adapter => 'sqlite', :database => settings.database)
+
+# Raise actual errors when something goes wrong
+DataMapper::Model.raise_on_save_failure = true
+
+configure :development do  
   require 'sinatra/reloader'
-  $stderr.puts 'development!'
-  DataMapper.setup(:default,
-                   :adapter => 'sqlite',
-                   :database => ENV['DB_URL'] || File.join('db', 'development.db'))
-  DataMapper::Model.raise_on_save_failure = true 
   DataMapper.auto_upgrade!
 end
 
 configure :test do
-  DataMapper.setup(:default, "sqlite::memory:")
-  DataMapper::Model.raise_on_save_failure = true
   DataMapper.auto_migrate!
 end
 
-configure :production do
-  DataMapper.setup(:default, :adapter => 'sqlite', :database => ENV['DB_URL'])
-end
-
-enable :sessions
